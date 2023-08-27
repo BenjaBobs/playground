@@ -1,15 +1,17 @@
-import { NumberInput, NumberInputField } from "@chakra-ui/react";
+import "@src/mythic-heroes/weekly-events/towers-of-babylon/towers-of-babylon.css";
+
 import { MythicHeroesItem } from "@src/mythic-heroes/data/items";
 import { Simulator } from "@src/shared/simulation";
-import { WeeklyEventExchangeTreePicker } from "@src/mythic-heroes/WeeklyEventExchangeTreePicker";
+import {
+  WeeklyEventExchangeTreePicker,
+  WeeklyExchangeTree,
+  WeeklyExchangeTreeSelection,
+} from "@src/mythic-heroes/weekly-events/WeeklyEventExchangeTreePicker";
 import { useState } from "react";
 
 const logger: typeof console = {
-  // eslint-disable-next-line
   log: () => {},
-  // eslint-disable-next-line
   group: () => {},
-  // eslint-disable-next-line
   groupEnd: () => {},
 } satisfies Partial<typeof console> as typeof console;
 
@@ -84,32 +86,7 @@ const towerPacks: {
 
 type TowerPackSelection = { [key: number]: number };
 
-type WeeklyExchangeReward = {
-  name: string;
-  max: number;
-  price: number;
-};
-type WeeklyExchangeRewardTier = [
-  WeeklyExchangeReward,
-  WeeklyExchangeReward,
-  WeeklyExchangeReward
-];
-type WeeklyExchangeTree = [
-  WeeklyExchangeRewardTier,
-  WeeklyExchangeRewardTier,
-  WeeklyExchangeRewardTier,
-  WeeklyExchangeRewardTier,
-  WeeklyExchangeRewardTier
-];
-type WeeklyExchangeTreeSelection = [
-  [number, number, number],
-  [number, number, number],
-  [number, number, number],
-  [number, number, number],
-  [number, number, number]
-];
-
-type WeeklyEventQuestReward = {
+export type WeeklyEventQuestReward = {
   required: number;
   rewards: Partial<{ [key in MythicHeroesItem]: number }>;
 };
@@ -306,11 +283,11 @@ const sim = new Simulator(
 export function TowersOfBabylon() {
   const [exchangeTreeSelection, setExchangeTreeSelection] =
     useState<WeeklyExchangeTreeSelection>([
-      [1, 0, 0],
-      [1, 0, 0],
-      [0, 1, 0],
-      [0, 1, 0],
-      [0, 2, 0],
+      [0, 0, 0],
+      [0, 0, 0],
+      [0, 0, 0],
+      [0, 0, 0],
+      [0, 0, 0],
     ]);
 
   const [towerPackSelection, setTowerPackSelection] =
@@ -331,14 +308,21 @@ export function TowersOfBabylon() {
 
   return (
     <div>
-      Seed:
-      <NumberInput value={seed} onChange={(_, next) => setSeed(next || 0)}>
-        <NumberInputField />
-      </NumberInput>
+      Seed:{" "}
+      <input
+        className="seed-input"
+        type="number"
+        onChange={(evt) => {
+          setSeed(parseInt(evt.target.value) || 0);
+        }}
+      />
       <p>
         You used {usedHammers} hammers to gain {gainedCoins} coins.
       </p>
-      <WeeklyEventExchangeTreePicker />
+      <WeeklyEventExchangeTreePicker
+        onNewSelection={setExchangeTreeSelection}
+        exchangeTree={towersOfBabylonExchangeTree}
+      />
     </div>
   );
 }

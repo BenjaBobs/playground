@@ -10,7 +10,7 @@ module.exports = {
   plugins: ["react-refresh"],
   rules: {
     "sort-imports": [
-      "error",
+      "off",
       {
         ignoreCase: false,
         ignoreDeclarationSort: false,
@@ -25,5 +25,6 @@ module.exports = {
         patterns: [".*"],
       },
     ],
+    "@typescript-eslint/no-unused-vars": "warn",
   },
 };

@@ -1,0 +1,21 @@
+.weekly-event-exchange-item {
+  background: red;
+  border-radius: 4px;
+  cursor: pointer;
+  user-select: none;
+
+  & > * {
+    pointer-events: none;
+    user-select: none;
+  }
+
+  &.active {
+    background: #f0f0f0;
+  }
+
+  &.inactive {
+    background: #f0f0f0;
+    opacity: 0.5;
+    pointer-events: none;
+  }
+}
