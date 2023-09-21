@@ -17,7 +17,7 @@ const logger: typeof console = {
 
 const towerPacks: {
   stock: number;
-  items: { [key in MythicHeroesItem]: number };
+  items: Partial<{ [key in MythicHeroesItem]: number }>;
 }[] = [
   {
     stock: 7,
@@ -188,7 +188,7 @@ const sim = new Simulator(
       0
     );
 
-    const inventory: { [key in MythicHeroesItem]: number } = {
+    const inventory: Partial<{ [key in MythicHeroesItem]: number }> = {
       ascentionHammer: 0,
       firmamentCoin: 0,
     };
@@ -198,13 +198,13 @@ const sim = new Simulator(
       args.towerPackSelection
     )) {
       const towerPack = towerPacks[parseInt(towerPackIndex)];
-      inventory["ascentionHammer"] +=
-        towerPack.items["ascentionHammer"] * amountToBuy;
-      inventory["firmamentCoin"] +=
-        towerPack.items["firmamentCoin"] * amountToBuy;
+      inventory["ascentionHammer"]! +=
+        towerPack.items["ascentionHammer"]! * amountToBuy;
+      inventory["firmamentCoin"]! +=
+        towerPack.items["firmamentCoin"]! * amountToBuy;
     }
 
-    let gainedCoins = inventory["firmamentCoin"];
+    let gainedCoins = inventory["firmamentCoin"]!;
 
     while (gainedCoins < requiredCoins) {
       logger.group({
@@ -224,7 +224,7 @@ const sim = new Simulator(
       // check for golden tower
       if (towerSympathyCounter >= 9 || rng.roll(goldenTowerProbability)) {
         logger.log("golden tower");
-        inventory["firmamentCoin"] += 5;
+        inventory["firmamentCoin"]! += 5;
         gainedCoins += 5;
         towerSympathyCounter = 0;
       } else {
@@ -240,7 +240,7 @@ const sim = new Simulator(
         for (const questReward of questRewards) {
           logger.log("quest reward", questReward.rewards);
           for (const [item, amount] of Object.entries(questReward.rewards)) {
-            inventory[item as MythicHeroesItem] += amount;
+            inventory[item as MythicHeroesItem]! += amount;
             if (item === "firmamentCoin") {
               gainedCoins += amount;
             }
@@ -254,7 +254,7 @@ const sim = new Simulator(
           const reward = towersOfBabylonExchangeTree[tierIndex][rewardIndex];
 
           for (let i = 0; i < amountToBuy; i++) {
-            if (reward.price > inventory["firmamentCoin"]) break;
+            if (reward.price > inventory["firmamentCoin"]!) break;
 
             exchangeProgress[tierIndex][rewardIndex] -= 1;
             const hammersGained = exchangeHammersPerTier[tierIndex];
@@ -262,9 +262,9 @@ const sim = new Simulator(
             logger.log(
               `bought from exchange ${reward.name}, gained hammers ${hammersGained}`
             );
-            inventory["firmamentCoin"] -= reward.price;
-            inventory.ascentionHammer += hammersGained;
-            inventory[reward.name as MythicHeroesItem] += amountToBuy;
+            inventory["firmamentCoin"]! -= reward.price;
+            inventory.ascentionHammer! += hammersGained;
+            inventory[reward.name as MythicHeroesItem]! += amountToBuy;
           }
         }
       }

@@ -5,6 +5,12 @@ export const mythicHeroesItems = {
   firmamentCoin: {
     name: "Firmament Coin",
   },
+  starCoin: {
+    name: "Star Coins",
+  },
+  luminousPearl: {
+    name: "Luminous Pearl",
+  },
 };
 
 export type MythicHeroesItem = keyof typeof mythicHeroesItems;

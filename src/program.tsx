@@ -4,6 +4,7 @@ import { MythicHeroes } from "@src/mythic-heroes/mythic-heroes";
 import { NavMenu } from "@src/nav-menu";
 import React from "react";
 import ReactDOM from "react-dom/client";
+import { KanaTable } from "@src/japanese/KanaTable";
 
 const root =
   document.getElementById("root") ??
@@ -14,6 +15,10 @@ export const apps: { [key: string]: { path: string; element: JSX.Element } } = {
   Home: {
     path: "/",
     element: <Home />,
+  },
+  Japanese: {
+    path: "/japanese",
+    element: <KanaTable />,
   },
   MythicHeroes: {
     path: "/mythic-heroes",

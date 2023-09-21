@@ -86,6 +86,7 @@ export function WeeklyEventExchangeTreePicker(props: {
         >
           {tier.map((reward, rewardIndex) => (
             <ExchangeReward
+              key={`${tierIndex}-${rewardIndex}`}
               reward={reward}
               active={isActive(tierIndex)}
               amount={selection[tierIndex][rewardIndex]}
