@@ -1,52 +1,74 @@
 .kana-table {
+  display: flex;
+  flex-direction: column;
+
   .kana-grid {
     display: grid;
-    grid-template-columns: 1fr repeat(5, 2fr);
-    grid-template-rows: repeat(10, 1fr);
-    grid-column-gap: 0px;
-    grid-row-gap: 0px;
-    gap: 1rem;
+    grid-template-columns: 1fr repeat(5, 5fr);
+    grid-template-rows: auto;
+    gap: 4rem;
+    flex-grow: 1;
+    flex-basis: 100%;
+  }
+
+  .elevate {
+    box-shadow: 0 5px 10px 3px rgba(0, 0, 0, 0.5);
   }
 
   .cell {
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    font-size: 2rem;
-    font-weight: bold;
+    font-size: 4rem;
+
+    &.header {
+      align-items: center;
+      font-weight: bold;
+      font-size: 5rem;
+    }
+
+    &.konsonant {
+      align-items: end;
+      font-weight: bold;
+      font-size: 5rem;
+    }
+
+    &.kana {
+      background: oklch(0.8 0.1 var(--hue));
+    }
+
+    > * {
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
   }
 
-  .cell-row {
+  .kana-row {
     display: flex;
     flex-direction: row;
-  }
-
-  .konsonant {
-    background-color: #f0f0f0;
-    width: 100%;
-    height: 100%;
-  }
-
-  .kana {
-    display: flex;
     justify-content: center;
-    align-items: baseline;
+    align-items: center;
     width: 100%;
-    height: 100%;
   }
 
   .hiragana {
-    background: lightseagreen;
     width: 100%;
-
-    padding: 2rem;
+    text-align: right;
+    padding: 1rem;
   }
 
   .katakana {
-    background: lightcoral;
     width: 100%;
+    padding: 1rem;
+    background-color: rgba(0, 0, 0, 0.05);
+  }
 
-    padding: 2rem;
+  .dakuten-row {
+    background-color: rgba(0, 0, 0, 0.05);
+  }
+
+  .handakuten-row {
+    background-color: rgba(0, 0, 0, 0.1);
   }
 }

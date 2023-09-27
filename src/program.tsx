@@ -6,6 +6,9 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { KanaTable } from "@src/japanese/KanaTable";
 
+// eslint-disable-next-line no-restricted-imports
+import "./program.scss";
+
 const root =
   document.getElementById("root") ??
   document.body.appendChild(document.createElement("div"));

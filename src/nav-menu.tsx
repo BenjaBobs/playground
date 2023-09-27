@@ -3,7 +3,7 @@ import { apps } from "@src/program";
 
 export function NavMenu() {
   return (
-    <div>
+    <div className="hide-in-print">
       {Object.entries(apps).map(([name, { path }]) => (
         <NavLink
           key={name}
