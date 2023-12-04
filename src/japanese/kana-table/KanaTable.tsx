@@ -1,5 +1,9 @@
-import { Kana, KanaRow, kanaRows } from "@src/japanese/KanaTable.data";
-import "@src/japanese/KanaTable.scss";
+import {
+  Kana,
+  KanaRow,
+  kanaRows,
+} from "@src/japanese/kana-table/KanaTable.data";
+import "@src/japanese/kana-table/KanaTable.scss";
 import React, { CSSProperties } from "react";
 
 const vowels = ["a", "i", "u", "e", "o"];

@@ -11,6 +11,10 @@ import { NavMenu } from "@src/nav-menu";
 import React from "react";
 import ReactDOM from "react-dom/client";
 
+import.meta.glob("./utils/extensions/*.ts", {
+  eager: true,
+});
+
 // eslint-disable-next-line no-restricted-imports
 import "./program.scss";
 import { RouteBranch, RouteDefinition, siteMap } from "@src/sitemap";

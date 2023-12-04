@@ -1,6 +1,7 @@
 import { Flex } from "@src/common/flex/flex";
 import { RouteBranch, siteMap } from "@src/sitemap";
 import { NavLink, matchPath, useLocation } from "react-router-dom";
+import "@src/nav-menu.scss";
 
 export function NavMenu() {
   useLocation();
@@ -9,9 +10,16 @@ export function NavMenu() {
 }
 
 function NavMenuRow(props: { branch: RouteBranch }) {
-  const matchingRoute = Object.values(props.branch).find((route) =>
-    matchPath({ path: route.fullPath!, end: false }, window.location.pathname)
-  );
+  const matchingRoute = Object.values(props.branch)
+    .orderBy((x) => x.relativePath?.length, "desc")
+    .find((route) =>
+      matchPath(
+        { path: route.relativePath!, end: false },
+        window.location.pathname
+      )
+    );
+
+  console.log(matchingRoute);
 
   return (
     <div className="hide-in-print">
@@ -20,11 +28,9 @@ function NavMenuRow(props: { branch: RouteBranch }) {
           <NavLink
             key={fullPath!}
             to={fullPath!}
-            style={({ isActive }) => ({
-              background: isActive ? "lightgrey" : undefined,
-              width: "100px",
-              padding: "5px",
-            })}
+            className={({ isActive }) =>
+              `nav-menu-item ${isActive ? "active" : ""}`
+            }
           >
             {menu?.name}
           </NavLink>

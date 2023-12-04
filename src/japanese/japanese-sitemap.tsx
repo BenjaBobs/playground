@@ -1,4 +1,4 @@
-import { KanaTable } from "@src/japanese/KanaTable";
+import { KanaTable } from "@src/japanese/kana-table/KanaTable";
 import { RouteDefinition } from "@src/sitemap";
 
 export const JapaneseSiteMap = {
