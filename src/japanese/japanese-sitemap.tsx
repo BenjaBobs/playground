@@ -1,3 +1,5 @@
+import { ContentBox } from "@src/common/context-box/ContextBox";
+import { ConjugationOverview } from "@src/japanese/conjugations/ConjugationOverview";
 import { KanaTable } from "@src/japanese/kana-table/KanaTable";
 import { RouteDefinition } from "@src/sitemap";
 
@@ -6,11 +8,15 @@ export const JapaneseSiteMap = {
   nested: {
     kana: {
       menu: { name: "Kana table" },
-      element: <KanaTable />,
+      element: (
+        <ContentBox>
+          <KanaTable />
+        </ContentBox>
+      ),
     },
-    wat: {
-      menu: { name: "Wat" },
-      element: <div>Wat</div>,
+    conjugations: {
+      menu: { name: "Conjugations" },
+      element: <ConjugationOverview />,
     },
   },
 } satisfies RouteDefinition;

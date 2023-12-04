@@ -14,12 +14,14 @@ export function Flex(
     itemsSizing?: "even";
     itemsPlacement?: "center";
     gap?: number | `${number}%`;
+    width?: number | `${number}%`;
   }>
 ) {
   return (
     <div
       style={{
         gap: props.gap,
+        width: props.width,
       }}
       onClick={props.onClick}
       onContextMenu={props.onContextMenu}
