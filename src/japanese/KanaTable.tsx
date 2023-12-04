@@ -23,6 +23,7 @@ export function KanaTable() {
                 key={row.konsonant + rowIdx + kana?.romaji + idx}
                 index={rowIdx}
                 kana={kana}
+                kanaIndex={idx}
               />
             ))}
           </React.Fragment>
@@ -45,10 +46,10 @@ function RowFirst(props: { row: KanaRow }) {
   );
 }
 
-function KanaCell(props: { kana?: Kana; index: number }) {
+function KanaCell(props: { kana?: Kana; index: number; kanaIndex: number }) {
   if (!props.kana) return <div className="kana cell empty"></div>;
 
-  const hue = (props.index * 360) / (kanaRows.length + 1);
+  const hue = (props.kanaIndex * 360) / (5 + 1);
 
   return (
     <div
@@ -57,29 +58,35 @@ function KanaCell(props: { kana?: Kana; index: number }) {
     >
       <div className="kana-row base-row">
         <div className="hiragana">
-          {props.kana.hiragana} ({props.kana.romaji})
+          {props.kana.hiragana}{" "}
+          <span className="romaji">({props.kana.romaji})</span>
         </div>
         <div className="katakana">
-          {props.kana.katakana} ({props.kana.romaji})
+          {props.kana.katakana}{" "}
+          <span className="romaji">({props.kana.romaji})</span>
         </div>
       </div>
       {props.kana.dakuten && (
         <div className="kana-row dakuten-row">
           <div className="hiragana">
-            {props.kana.hiragana + "゙"} ({props.kana.dakuten})
+            {props.kana.hiragana + "゙"}{" "}
+            <span className="romaji">({props.kana.dakuten})</span>
           </div>
           <div className="katakana">
-            {props.kana.katakana + "゙"} ({props.kana.dakuten})
+            {props.kana.katakana + "゙"}{" "}
+            <span className="romaji">({props.kana.dakuten})</span>
           </div>
         </div>
       )}
       {props.kana.handakuten && (
         <div className="kana-row handakuten-row">
           <div className="hiragana">
-            {props.kana.hiragana + "゚"} ({props.kana.handakuten})
+            {props.kana.hiragana + "゚"}{" "}
+            <span className="romaji">({props.kana.handakuten})</span>
           </div>
           <div className="katakana">
-            {props.kana.katakana + "゚"} ({props.kana.handakuten})
+            {props.kana.katakana + "゚"}{" "}
+            <span className="romaji">({props.kana.handakuten})</span>
           </div>
         </div>
       )}

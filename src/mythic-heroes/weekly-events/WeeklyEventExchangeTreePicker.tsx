@@ -76,11 +76,11 @@ export function WeeklyEventExchangeTreePicker(props: {
   }
 
   return (
-    <Flex dir="down" gap={12}>
+    <Flex down gap={12}>
       {props.exchangeTree.map((tier, tierIndex) => (
         <Flex
           key={tierIndex}
-          dir="right"
+          right
           justify="space-around"
           itemsPlacement="center"
         >
@@ -109,7 +109,7 @@ function ExchangeReward(props: {
 }) {
   return (
     <Flex
-      dir="down"
+      down
       itemsPlacement="center"
       className={`weekly-event-exchange-item ${
         props.active ? "active" : "inactive"
@@ -125,7 +125,7 @@ function ExchangeReward(props: {
       <span>
         Stock {props.reward.max - props.amount} (selected: {props.amount})
       </span>
-      <Flex dir="right">
+      <Flex right>
         <span>star icon</span>
         <span>{props.reward.price}</span>
       </Flex>
