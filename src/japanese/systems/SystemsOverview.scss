@@ -1,0 +1,51 @@
+.te-form-stub {
+}
+
+.te-form-stub-suffix {
+  position: absolute;
+  animation: te-form-stub-suffix ease-out infinite;
+}
+
+.te-form-te-suffix {
+  position: absolute;
+  animation: te-form-te-suffix ease-in infinite;
+}
+
+// remove stub suffix keyframes
+// by reducing opacity
+@keyframes te-form-stub-suffix {
+  0% {
+    opacity: 1;
+    color: black;
+  }
+  25% {
+    opacity: 1;
+    transform: translateY(0);
+    color: red;
+  }
+  75%,
+  100% {
+    opacity: 0;
+    transform: translateY(-1rem);
+  }
+}
+
+// add the te-suffix by sliding in from the right
+// and turning opacity up
+@keyframes te-form-te-suffix {
+  0% {
+    opacity: 0;
+    color: green;
+    transform: translateX(1.5rem);
+  }
+  25% {
+    opacity: 0.25;
+    transform: translateX(1.5rem);
+  }
+  75%,
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+    color: green;
+  }
+}

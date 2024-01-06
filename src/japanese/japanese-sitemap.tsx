@@ -1,5 +1,5 @@
 import { ContentBox } from "@src/common/context-box/ContextBox";
-import { ConjugationOverview } from "@src/japanese/conjugations/ConjugationOverview";
+import { SystemsOverview } from "@src/japanese/systems/SystemsOverview";
 import { KanaTable } from "@src/japanese/kana-table/KanaTable";
 import { RouteDefinition } from "@src/sitemap";
 
@@ -14,9 +14,9 @@ export const JapaneseSiteMap = {
         </ContentBox>
       ),
     },
-    conjugations: {
-      menu: { name: "Conjugations" },
-      element: <ConjugationOverview />,
+    systems: {
+      menu: { name: "Systems" },
+      element: <SystemsOverview />,
     },
   },
 } satisfies RouteDefinition;

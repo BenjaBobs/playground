@@ -314,9 +314,17 @@ export const kanaRows: KanaRow[] = [
         hiragana: "わ",
         katakana: "ワ",
       },
+      {
+        romaji: "wi",
+        hiragana: "ゐ",
+        katakana: "ヰ",
+      },
       undefined,
-      undefined,
-      undefined,
+      {
+        romaji: "we",
+        hiragana: "ゑ",
+        katakana: "ヱ",
+      },
       {
         romaji: "wo",
         hiragana: "を",

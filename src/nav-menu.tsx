@@ -19,8 +19,6 @@ function NavMenuRow(props: { branch: RouteBranch }) {
       )
     );
 
-  console.log(matchingRoute);
-
   return (
     <div className="hide-in-print">
       <Flex right itemsPlacement="center">

@@ -1,6 +1,11 @@
 .flex {
   display: flex;
 
+  &.slim {
+    width: fit-content;
+    height: fit-content;
+  }
+
   &.dir-up {
     flex-direction: column-reverse;
   }

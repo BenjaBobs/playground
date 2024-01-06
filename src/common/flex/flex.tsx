@@ -3,9 +3,11 @@ import "@src/common/flex/flex.css";
 
 export function Flex(
   props: PropsWithChildren<{
+    style?: React.CSSProperties & { [key: `--${string}`]: string };
     onClick?: MouseEventHandler<HTMLDivElement>;
     onContextMenu?: MouseEventHandler<HTMLDivElement>;
     className?: string;
+    slim?: boolean;
     up?: boolean;
     down?: boolean;
     left?: boolean;
@@ -17,29 +19,36 @@ export function Flex(
     width?: number | `${number}%`;
   }>
 ) {
+  const classes = [
+    "flex",
+    getDir(props),
+    props.justify && "just-" + props.justify,
+    props.itemsSizing && "items-sizing-" + props.itemsSizing,
+    props.itemsPlacement && "items-placement-" + props.itemsPlacement,
+    props.className,
+    props.slim && "slim",
+  ];
+
   return (
     <div
       style={{
         gap: props.gap,
         width: props.width,
+        ...props.style,
       }}
       onClick={props.onClick}
       onContextMenu={props.onContextMenu}
-      className={`flex dir-${getDir(props)} just-${
-        props.justify
-      } items-sizing-${props.itemsSizing} items-placement-${
-        props.itemsPlacement
-      } ${props.className}`}
+      className={classes.filter((x) => x).join(" ")}
     >
       {props.children}
     </div>
   );
 }
 
-function getDir(object: any) {
-  if (object.up) return "up";
-  if (object.down) return "down";
-  if (object.left) return "left";
-  if (object.right) return "right";
-  return "down";
+function getDir(object: Parameters<typeof Flex>[0]) {
+  if (object.up) return "dir-up";
+  if (object.down) return "dir-down";
+  if (object.left) return "dir-left";
+  if (object.right) return "dir-right";
+  return "dir-down";
 }
