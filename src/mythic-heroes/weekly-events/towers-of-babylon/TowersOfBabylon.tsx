@@ -290,11 +290,10 @@ export function TowersOfBabylon() {
       [0, 0, 0],
     ]);
 
-  const [towerPackSelection, setTowerPackSelection] =
-    useState<TowerPackSelection>({
-      0: 7,
-      1: 3,
-    });
+  const [towerPackSelection] = useState<TowerPackSelection>({
+    0: 7,
+    1: 3,
+  });
 
   const [seed, setSeed] = useState(0);
 
