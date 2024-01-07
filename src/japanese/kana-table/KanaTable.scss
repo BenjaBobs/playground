@@ -1,12 +1,16 @@
 .kana-table {
   display: flex;
   flex-direction: column;
+  width: 100%;
+  height: 100%;
 
   .kana-grid {
     display: grid;
-    grid-template-columns: 1fr repeat(5, 5fr);
-    grid-template-rows: auto;
-    gap: 1rem;
+    width: 100%;
+    height: 100%;
+    grid-template-columns: 1fr repeat(5, minmax(1%, 5fr));
+    grid-template-rows: repeat(12, minmax(1%, auto));
+    gap: 1em;
     flex-grow: 1;
     flex-basis: 100%;
   }
@@ -15,14 +19,22 @@
     box-shadow: 0 3px 5px 1px rgba(0, 0, 0, 0.5);
   }
 
+  .kana-cell-ghost {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+  }
+
   .cell {
+    position: relative;
     display: flex;
     flex-direction: column;
-    font-size: 1.3rem;
+    font-size: 1.3em;
 
     &.header {
       align-items: center;
       font-weight: bold;
+      font-size: 2em;
     }
 
     &.konsonant {
@@ -57,13 +69,12 @@
   .hiragana {
     width: 100%;
     text-align: right;
-    padding: 1rem;
+    padding: 1em;
   }
 
   .katakana {
     width: 100%;
-    padding: 1rem;
-    // background-color: rgba(0, 0, 0, 0.05);
+    padding: 1em;
   }
 
   .dakuten-row {

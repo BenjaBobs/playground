@@ -54,13 +54,14 @@ function KanaCell(props: { kana?: Kana; index: number; kanaIndex: number }) {
   if (!props.kana) return <div className="kana cell empty"></div>;
 
   const hue = (props.kanaIndex * 360) / (5 + 1);
+  const vowel = vowels[props.kanaIndex];
 
   return (
     <div
       style={{ "--hue": hue } as CSSProperties}
-      className={`kana cell row-${props.index} elevate`}
+      className={`kana cell row-${props.index} col-${vowel} elevate`}
     >
-      <div className="kana-row base-row">
+      <div className={`kana-row base-row kana-${props.kana.romaji}`}>
         <div className="hiragana">
           {props.kana.hiragana}{" "}
           <span className="romaji">({props.kana.romaji})</span>
@@ -71,7 +72,7 @@ function KanaCell(props: { kana?: Kana; index: number; kanaIndex: number }) {
         </div>
       </div>
       {props.kana.dakuten && (
-        <div className="kana-row dakuten-row">
+        <div className={`kana-row dakuten-row kana-${props.kana.dakuten}`}>
           <div className="hiragana">
             {props.kana.hiragana + "゙"}{" "}
             <span className="romaji">({props.kana.dakuten})</span>
@@ -83,7 +84,9 @@ function KanaCell(props: { kana?: Kana; index: number; kanaIndex: number }) {
         </div>
       )}
       {props.kana.handakuten && (
-        <div className="kana-row handakuten-row">
+        <div
+          className={`kana-row handakuten-row kana-${props.kana.handakuten}`}
+        >
           <div className="hiragana">
             {props.kana.hiragana + "゚"}{" "}
             <span className="romaji">({props.kana.handakuten})</span>
@@ -94,6 +97,7 @@ function KanaCell(props: { kana?: Kana; index: number; kanaIndex: number }) {
           </div>
         </div>
       )}
+      <div className="kana-cell-ghost" />
     </div>
   );
 }

@@ -1,9 +1,10 @@
-import { Anim } from "@src/common/anim/Anim";
+import { Anim, Animator } from "@src/common/anim/Animator";
 import { ContentBox } from "@src/common/context-box/ContextBox";
 import { Flex } from "@src/common/flex/flex";
-import { Grid, GridItem } from "@src/common/grid/Grid";
+import { KanaTable } from "@src/japanese/kana-table/KanaTable";
 
 import "@src/japanese/systems/SystemsOverview.scss";
+import React from "react";
 
 export function SystemsOverview() {
   return (
@@ -13,7 +14,7 @@ export function SystemsOverview() {
 
       <div>
         <p>Example of taberu</p>
-        <Anim duration={3}>
+        <Animator>
           <WordAnim
             stub={
               <>
@@ -24,9 +25,9 @@ export function SystemsOverview() {
             stubSuffix={<Kana kana="る" romaji="ru" />}
             teSuffix={<Kana kana="て" romaji="te" />}
           />
-        </Anim>
-        <p>Example of au</p>{" "}
-        <Anim duration={3}>
+        </Animator>
+        <p>Example of au</p>
+        <Animator>
           <WordAnim
             stub={<Kana kana="あ" romaji="a" />}
             stubSuffix={<Kana kana="う" romaji="u" />}
@@ -37,21 +38,147 @@ export function SystemsOverview() {
               </>
             }
           />
-        </Anim>
+        </Animator>
+        <p>Example of kuru</p>
+        <Animator duration={5}>
+          <Flex right>
+            <Anim
+              setup={(x) => [
+                {
+                  target: [x.querySelector(".kana-ku")!],
+                  easing: "ease-out",
+                  keyframes: [
+                    { offset: 0, opacity: 1, translate: "0% 0%" },
+                    { offset: 0.1, color: "red" },
+                    {
+                      offset: 0.5,
+                      opacity: 0,
+                      translate: "0% -150%",
+                    },
+                    {
+                      offset: 1,
+                      opacity: 0,
+                      translate: "0% -150%",
+                      color: "red",
+                    },
+                  ],
+                },
+                {
+                  target: [x.querySelector(".kana-ki")!],
+                  easing: "ease-out",
+                  keyframes: [
+                    {
+                      offset: 0,
+                      opacity: 0,
+                      translate: "-150% 0%",
+                      color: "green",
+                    },
+                    {
+                      offset: 0.5,
+                      opacity: 1,
+                      translate: "0% 0%",
+                    },
+                    {
+                      offset: 1,
+                      opacity: 1,
+                      translate: "0% 0%",
+                      color: "black",
+                    },
+                  ],
+                },
+                {
+                  target: [x.querySelector(".kana-ru")!],
+                  keyframes: [
+                    { offset: 0, opacity: 1, translate: "0% 0%" },
+                    { offset: 0.5, opacity: 1, translate: "0% 0%" },
+                    {
+                      offset: 1,
+                      opacity: 0,
+                      translate: "0% -150%",
+                      color: "red",
+                    },
+                  ],
+                },
+                {
+                  target: [x.querySelector(".kana-te")!],
+                  keyframes: [
+                    { offset: 0, opacity: 0, translate: "150% 0%" },
+                    { offset: 0.5, opacity: 0, translate: "150% 0%" },
+                    { offset: 1, opacity: 1, translate: "0% 0%" },
+                  ],
+                },
+              ]}
+            >
+              <Kana kana="く" romaji="ku" />
+              <Kana kana="き" romaji="ki" replacement />
+              <Kana kana="る" romaji="ru" />
+              <Kana kana="て" romaji="te" replacement />
+            </Anim>
+            <div
+              style={{
+                position: "absolute",
+                width: 200,
+                fontSize: 2,
+                translate: "100% -50%",
+              }}
+            >
+              <Anim
+                setup={(x) => [
+                  {
+                    target: [x.querySelector(".kana-table")!],
+                    keyframes: [
+                      { offset: 0, opacity: 0 },
+                      { offset: 0.05, opacity: 1 },
+                      { offset: 0.45, opacity: 1 },
+                      { offset: 1, opacity: 0 },
+                    ],
+                  },
+                  {
+                    target: [...x.querySelectorAll(".header")],
+                    keyframes: [
+                      {
+                        offset: 0,
+                        fontSize: "5em",
+                      },
+                    ],
+                  },
+                  {
+                    target: [
+                      ...x.querySelectorAll(".row-1.col-u .kana-cell-ghost"),
+                    ],
+                    keyframes: [
+                      {
+                        offset: 0,
+                        opacity: 0.5,
+                        backgroundColor: "red",
+                        translate: "0% 0%",
+                      },
+                      {
+                        offset: 0.25,
+                        translate: "-50% -1em",
+                      },
+                      {
+                        offset: 0.5,
+                        opacity: 0.5,
+                        backgroundColor: "green",
+                        translate: "calc(-100% - 0.9em) 0%",
+                      },
+                      {
+                        offset: 1,
+                        opacity: 0.1,
+                        backgroundColor: "green",
+                        translate: "calc(-100% - 0.9em) 0%",
+                      },
+                    ],
+                  },
+                ]}
+              >
+                <KanaTable />
+              </Anim>
+            </div>
+          </Flex>
+        </Animator>
       </div>
-
-      <Grid columns={["1fr", "1fr", "1fr"]} rows={["auto", "auto", "auto"]}>
-        <GridItem at={[1, 1]}>Ru-verb</GridItem>
-        <GridItem at={[2, 1]}>ru -{">"} te</GridItem>
-        <GridItem at={[3, 1]}>taberu -{">"} tabete</GridItem>
-        <GridItem at={[1, 2]}>U-verb</GridItem>
-        <GridItem at={[2, 2]}>u -{">"} tte</GridItem>
-        <GridItem at={[3, 2]}>au -{">"} atte</GridItem>
-        <GridItem at={[1, 3]}>Irregular</GridItem>
-        <GridItem at={[2, 3]}>kuru -{">"} kite</GridItem>
-        <GridItem at={[3, 3]}>suru -{">"} shite</GridItem>
-      </Grid>
-      <h1>Adjectives</h1>
     </ContentBox>
   );
 }
@@ -76,9 +203,14 @@ function WordAnim(props: {
   );
 }
 
-function Kana(props: { kana: string; romaji: string }) {
+function Kana(props: { kana: string; romaji: string; replacement?: boolean }) {
   return (
-    <Flex down slim>
+    <Flex
+      down
+      slim
+      className={"kana-" + props.romaji}
+      style={{ marginLeft: props.replacement ? "-25%" : undefined }}
+    >
       <span>{props.kana}</span>
       <span>{props.romaji}</span>
     </Flex>
