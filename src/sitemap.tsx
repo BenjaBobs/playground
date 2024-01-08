@@ -18,7 +18,7 @@ export type RouteDefinition = {
 
 export const siteMap = {
   home: {
-    relativePath: "/",
+    relativePath: "",
     menu: { name: "Home" },
     element: (
       <div>
