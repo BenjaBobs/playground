@@ -62,16 +62,17 @@ export function KanaTablePage() {
 
 export function KanaTable(props: {
   rotate?: boolean;
-  size?: number;
   katakana?: boolean;
   romaji?: boolean;
+  style?: CSSProperties;
+  className?: string;
 }) {
   return (
     <div
-      style={{ fontSize: props.size }}
-      className={`kana-table ${props.romaji || "no-romaji"} ${
-        props.katakana || "no-katakana"
-      }`}
+      style={props.style}
+      className={`kana-table ${props.className || ""} ${
+        props.romaji || "no-romaji"
+      } ${props.katakana || "no-katakana"}`}
     >
       <div className="kana-grid">
         {columns.map((column, columnIdx) => (

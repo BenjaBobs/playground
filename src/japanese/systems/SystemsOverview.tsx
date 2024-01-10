@@ -161,7 +161,7 @@ export function SystemsOverview() {
                 },
               ]}
             >
-              <KanaTable size={3} />
+              <KanaTable style={{ fontSize: 3, opacity: 0 }} />
             </Anim>
           </Stack>
         </Animator>
