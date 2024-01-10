@@ -162,39 +162,39 @@ function KanaCell(props: {
       className={`kana cell row-${props.rowIndex} col-${vowel} elevate`}
     >
       <div className={`kana-row base-row kana-${props.kana.romaji}`}>
-        <div className="hiragana">
+        <Flex down className="hiragana">
           {props.kana.hiragana}{" "}
           <span className="romaji">({props.kana.romaji})</span>
-        </div>
-        <div className="katakana">
+        </Flex>
+        <Flex down className="katakana">
           {props.kana.katakana}{" "}
           <span className="romaji">({props.kana.romaji})</span>
-        </div>
+        </Flex>
       </div>
       {props.kana.dakuten && (
         <div className={`kana-row dakuten-row kana-${props.kana.dakuten}`}>
-          <div className="hiragana">
+          <Flex down className="hiragana">
             {props.kana.hiragana + "゙"}{" "}
             <span className="romaji">({props.kana.dakuten})</span>
-          </div>
-          <div className="katakana">
+          </Flex>
+          <Flex down className="katakana">
             {props.kana.katakana + "゙"}{" "}
             <span className="romaji">({props.kana.dakuten})</span>
-          </div>
+          </Flex>
         </div>
       )}
       {props.kana.handakuten && (
         <div
           className={`kana-row handakuten-row kana-${props.kana.handakuten}`}
         >
-          <div className="hiragana">
+          <Flex down className="hiragana">
             {props.kana.hiragana + "゚"}{" "}
             <span className="romaji">({props.kana.handakuten})</span>
-          </div>
-          <div className="katakana">
+          </Flex>
+          <Flex down className="katakana">
             {props.kana.katakana + "゚"}{" "}
             <span className="romaji">({props.kana.handakuten})</span>
-          </div>
+          </Flex>
         </div>
       )}
       <div className="kana-cell-ghost" />
