@@ -25,6 +25,10 @@
     height: 100%;
   }
 
+  .kana-column-ghost {
+    z-index: 1;
+  }
+
   .cell {
     position: relative;
     display: flex;
@@ -40,6 +44,7 @@
     &.konsonant {
       align-items: end;
       font-weight: bold;
+      grid-column: 1 / 2;
     }
 
     &.kana {
@@ -58,6 +63,12 @@
     }
   }
 
+  &.no-romaji {
+    .romaji {
+      display: none;
+    }
+  }
+
   .kana-row {
     display: flex;
     flex-direction: row;
@@ -68,13 +79,19 @@
 
   .hiragana {
     width: 100%;
-    text-align: right;
+    text-align: center;
     padding: 1em;
   }
 
   .katakana {
     width: 100%;
     padding: 1em;
+  }
+
+  &.no-katakana {
+    .katakana {
+      display: none;
+    }
   }
 
   .dakuten-row {

@@ -10,7 +10,7 @@ export const JapaneseSiteMap = {
       menu: { name: "Kana table" },
       element: (
         <ContentBox>
-          <KanaTable />
+          <KanaTable noRomaji noKatakana />
         </ContentBox>
       ),
     },

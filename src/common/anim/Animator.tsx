@@ -12,41 +12,43 @@ import "@src/common/anim/Animator.scss";
 import { useEffectRefsPopulated } from "@src/common/hooks/useEffectRefsPopulated";
 
 type AnimationContext = {
-  play: boolean;
+  mode: "pause" | "play" | "repeat";
   progress: number;
   duration: number;
 };
 
 const animContext = createContext<AnimationContext>({
-  play: false,
+  mode: "pause",
   progress: 0,
   duration: 0,
 });
 
 export function Animator(props: PropsWithChildren<{ duration?: number }>) {
   const duration = props.duration ?? 3;
-  const [play, setPlay] = useState(false);
+  const [mode, setMode] = useState<"pause" | "play" | "repeat">("pause");
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
-    if (!play) return;
+    if (mode === "pause") return;
 
     const interval = setInterval(() => {
-      setProgress((progress) =>
-        progress >= 1 ? 0 : progress + 1 / duration / 100
-      );
+      setProgress((progress) => {
+        const newProgress = Math.min(1, progress + 1 / duration / 100);
+
+        return newProgress >= 1 && mode === "repeat" ? 0 : newProgress;
+      });
     }, 10);
 
     return () => clearInterval(interval);
-  }, [play, setProgress, duration]);
+  }, [mode, setProgress, duration]);
 
   return (
-    <animContext.Provider value={{ play, progress, duration }}>
+    <animContext.Provider value={{ mode, progress, duration }}>
       <Flex
         down
         slim
         itemsPlacement="center"
-        className="anim"
+        className="animator"
         style={{
           "--anim-delay": `-${progress * duration - 0.0001}s`,
           "--anim-duration": duration + "s",
@@ -55,9 +57,17 @@ export function Animator(props: PropsWithChildren<{ duration?: number }>) {
       >
         {props.children}
         <Flex right>
-          <button style={{ width: 60 }} onClick={() => setPlay(!play)}>
-            {play ? "Pause" : "Play"}
+          <button
+            style={{ width: 60 }}
+            onClick={() =>
+              setMode((old) =>
+                old === "pause" ? "play" : old === "play" ? "repeat" : "pause"
+              )
+            }
+          >
+            {mode === "pause" ? "Play" : mode === "play" ? "Repeat" : "Stop"}
           </button>
+          <span style={{ width: 40 }}>{(progress * 100).toFixed()}%</span>
           <input
             type="range"
             min="0"
@@ -66,6 +76,9 @@ export function Animator(props: PropsWithChildren<{ duration?: number }>) {
             step="0.0001"
             onChange={(evt) => setProgress(evt.target.valueAsNumber)}
           />
+          <span>
+            {(progress * duration).toFixed(1)}s / {duration}s
+          </span>
         </Flex>
       </Flex>
     </animContext.Provider>
@@ -77,6 +90,7 @@ export function Anim(
     setup: (elem: HTMLElement) => {
       target: Element[];
       keyframes: Keyframe[];
+      fill?: "forwards" | "backwards" | "both" | "none";
       easing?: "ease-in-out" | "ease-in" | "ease-out" | "linear";
     }[];
   }>
@@ -91,13 +105,27 @@ export function Anim(
 
     anims.current = setups.flatMap((setup) =>
       setup.target.map((target) => {
-        const animation = target.animate(setup.keyframes, {
+        const accumulatedEndFrame: Keyframe = {
+          ...setup.keyframes.reduce(
+            (accum, next) => ({ ...accum, ...next }),
+            {}
+          ),
+          offset: 1,
+        };
+
+        const patchedFrames = [
+          ...setup.keyframes.filter((frame) => frame.offset !== 1),
+          accumulatedEndFrame,
+        ];
+
+        console.log(patchedFrames);
+
+        const animation = target.animate(patchedFrames, {
+          fill: "forwards",
           duration: animationState.duration * 1000,
-          iterations: Infinity,
-          easing: setup.easing ?? "ease-in-out",
         });
 
-        if (animationState.play) {
+        if (animationState.mode !== "pause") {
           animation.play();
         } else {
           animation.pause();
@@ -113,12 +141,12 @@ export function Anim(
   }, [selfRef.current]);
 
   useEffect(() => {
-    if (animationState.play) {
+    if (animationState.mode !== "pause") {
       anims.current?.forEach((anim) => anim.play());
     } else {
       anims.current?.forEach((anim) => anim.pause());
     }
-  }, [animationState.play]);
+  }, [animationState.mode]);
 
   useEffect(() => {
     anims.current?.forEach((anim) => {
@@ -133,7 +161,7 @@ export function Anim(
   }, [animationState.progress]);
 
   return (
-    <div ref={selfRef} style={{ display: "contents" }}>
+    <div ref={selfRef} className="anim">
       {props.children}
     </div>
   );

@@ -1,6 +1,7 @@
 import { Anim, Animator } from "@src/common/anim/Animator";
 import { ContentBox } from "@src/common/context-box/ContextBox";
 import { Flex } from "@src/common/flex/flex";
+import { Stack } from "@src/common/stack/Stack";
 import { KanaTable } from "@src/japanese/kana-table/KanaTable";
 
 import "@src/japanese/systems/SystemsOverview.scss";
@@ -41,142 +42,128 @@ export function SystemsOverview() {
         </Animator>
         <p>Example of kuru</p>
         <Animator duration={5}>
-          <Flex right>
-            <Anim
-              setup={(x) => [
-                {
-                  target: [x.querySelector(".kana-ku")!],
-                  easing: "ease-out",
-                  keyframes: [
-                    { offset: 0, opacity: 1, translate: "0% 0%" },
-                    { offset: 0.1, color: "red" },
-                    {
-                      offset: 0.5,
-                      opacity: 0,
-                      translate: "0% -150%",
-                    },
-                    {
-                      offset: 1,
-                      opacity: 0,
-                      translate: "0% -150%",
-                      color: "red",
-                    },
-                  ],
-                },
-                {
-                  target: [x.querySelector(".kana-ki")!],
-                  easing: "ease-out",
-                  keyframes: [
-                    {
-                      offset: 0,
-                      opacity: 0,
-                      translate: "-150% 0%",
-                      color: "green",
-                    },
-                    {
-                      offset: 0.5,
-                      opacity: 1,
-                      translate: "0% 0%",
-                    },
-                    {
-                      offset: 1,
-                      opacity: 1,
-                      translate: "0% 0%",
-                      color: "black",
-                    },
-                  ],
-                },
-                {
-                  target: [x.querySelector(".kana-ru")!],
-                  keyframes: [
-                    { offset: 0, opacity: 1, translate: "0% 0%" },
-                    { offset: 0.5, opacity: 1, translate: "0% 0%" },
-                    {
-                      offset: 1,
-                      opacity: 0,
-                      translate: "0% -150%",
-                      color: "red",
-                    },
-                  ],
-                },
-                {
-                  target: [x.querySelector(".kana-te")!],
-                  keyframes: [
-                    { offset: 0, opacity: 0, translate: "150% 0%" },
-                    { offset: 0.5, opacity: 0, translate: "150% 0%" },
-                    { offset: 1, opacity: 1, translate: "0% 0%" },
-                  ],
-                },
-              ]}
-            >
-              <Kana kana="く" romaji="ku" />
-              <Kana kana="き" romaji="ki" replacement />
-              <Kana kana="る" romaji="ru" />
-              <Kana kana="て" romaji="te" replacement />
-            </Anim>
-            <div
-              style={{
-                position: "absolute",
-                width: 200,
-                fontSize: 2,
-                translate: "100% -50%",
-              }}
-            >
+          <Stack>
+            <Flex right>
               <Anim
                 setup={(x) => [
                   {
-                    target: [x.querySelector(".kana-table")!],
+                    target: [x.querySelector(".kana-ku")!],
+                    easing: "linear",
                     keyframes: [
-                      { offset: 0, opacity: 0 },
-                      { offset: 0.05, opacity: 1 },
-                      { offset: 0.45, opacity: 1 },
-                      { offset: 1, opacity: 0 },
-                    ],
-                  },
-                  {
-                    target: [...x.querySelectorAll(".header")],
-                    keyframes: [
+                      { offset: 0.4 },
+                      { offset: 0.5, color: "red", translate: "0% 0%" },
                       {
-                        offset: 0,
-                        fontSize: "5em",
+                        offset: 0.6,
+                        opacity: 1,
+                      },
+                      {
+                        offset: 0.7,
+                        translate: "0% -150%",
+                        opacity: 0,
                       },
                     ],
                   },
                   {
-                    target: [
-                      ...x.querySelectorAll(".row-1.col-u .kana-cell-ghost"),
-                    ],
+                    target: [x.querySelector(".kana-ki")!],
+                    easing: "ease-out",
                     keyframes: [
+                      { offset: 0, opacity: 0, translate: "150% 0%" },
                       {
-                        offset: 0,
-                        opacity: 0.5,
-                        backgroundColor: "red",
+                        offset: 0.5,
+                        opacity: 0,
+                        translate: "-150% 0%",
+                        color: "green",
+                      },
+                      {
+                        offset: 0.7,
+                        opacity: 1,
                         translate: "0% 0%",
                       },
                       {
-                        offset: 0.25,
-                        translate: "-50% -1em",
+                        offset: 1,
+                        opacity: 1,
+                        translate: "0% 0%",
+                        color: "black",
                       },
+                    ],
+                  },
+                  {
+                    target: [x.querySelector(".kana-ru")!],
+                    keyframes: [
+                      { offset: 0, opacity: 1, translate: "0% 0%" },
                       {
-                        offset: 0.5,
-                        opacity: 0.5,
-                        backgroundColor: "green",
-                        translate: "calc(-100% - 0.9em) 0%",
+                        offset: 0.8,
+                        opacity: 1,
+                        color: "black",
+                        translate: "0% 0%",
                       },
                       {
                         offset: 1,
-                        opacity: 0.1,
-                        backgroundColor: "green",
-                        translate: "calc(-100% - 0.9em) 0%",
+                        opacity: 0,
+                        translate: "0% -150%",
+                        color: "red",
                       },
+                    ],
+                  },
+                  {
+                    target: [x.querySelector(".kana-te")!],
+                    keyframes: [
+                      { offset: 0, opacity: 0, translate: "150% 0%" },
+                      { offset: 0.8, opacity: 0, translate: "150% 0%" },
+                      { offset: 1, opacity: 1, translate: "0% 0%" },
                     ],
                   },
                 ]}
               >
-                <KanaTable />
+                <Kana kana="く" romaji="ku" />
+                <Kana kana="き" romaji="ki" replacement />
+                <Kana kana="る" romaji="ru" />
+                <Kana kana="て" romaji="te" replacement />
               </Anim>
-            </div>
-          </Flex>
+            </Flex>
+            <Anim
+              setup={(x) => [
+                {
+                  target: [x.querySelector(".kana-table")!],
+                  easing: "linear",
+                  keyframes: [
+                    { offset: 0, opacity: 0 },
+                    { offset: 0.05, opacity: 1 },
+                    { offset: 0.35, opacity: 1 },
+                    { offset: 0.4, opacity: 0 },
+                  ],
+                },
+                {
+                  target: [...x.querySelectorAll(".header")],
+                  keyframes: [
+                    {
+                      offset: 0,
+                      fontSize: "5em",
+                    },
+                  ],
+                },
+                {
+                  target: [...x.querySelectorAll(".kana-column-ghost.col-u")],
+                  keyframes: [
+                    {
+                      offset: 0,
+                      border: "1px solid black",
+                    },
+                    {
+                      offset: 0.05,
+                      translate: "0%",
+                    },
+                    {
+                      offset: 0.2,
+                      translate: "calc(-100% - 1em)",
+                    },
+                  ],
+                },
+              ]}
+            >
+              <KanaTable size={3} noKatakana noRomaji />
+            </Anim>
+          </Stack>
         </Animator>
       </div>
     </ContentBox>

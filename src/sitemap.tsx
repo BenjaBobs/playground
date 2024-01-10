@@ -32,7 +32,7 @@ export const siteMap = {
   mythicHeroes: MythicHeroesSitemap,
 } satisfies RouteDefinition["nested"];
 
-enhance(siteMap as any);
+enhance(siteMap);
 
 function enhance(routeMap: RouteBranch, parent?: RouteDefinition) {
   Object.entries(routeMap).forEach(([path, route]) => {

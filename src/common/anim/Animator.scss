@@ -1,7 +1,11 @@
-.anim {
+.animator {
   * {
     animation-play-state: var(--anim-state) !important;
     animation-duration: var(--anim-duration) !important;
     animation-delay: var(--anim-delay) !important;
   }
+}
+
+.anim {
+  display: contents;
 }

@@ -18,6 +18,7 @@ type GridDimension =
 
 export function Grid(
   props: PropsWithChildren<{
+    className?: string;
     columns: GridDimension[];
     rows: GridDimension[];
     gap?: number | [number, number];
@@ -35,7 +36,7 @@ export function Grid(
   };
 
   return (
-    <div style={style} className="grid">
+    <div style={style} className={`grid ${props.className || ""}`}>
       {props.children}
     </div>
   );
