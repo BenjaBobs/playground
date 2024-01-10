@@ -60,12 +60,10 @@ export function Animator(props: PropsWithChildren<{ duration?: number }>) {
           <button
             style={{ width: 60 }}
             onClick={() =>
-              setMode((old) =>
-                old === "pause" ? "play" : old === "play" ? "repeat" : "pause"
-              )
+              setMode((old) => (old === "pause" ? "play" : "pause"))
             }
           >
-            {mode === "pause" ? "Play" : mode === "play" ? "Repeat" : "Stop"}
+            {mode === "pause" ? "Play" : "Pause"}
           </button>
           <span style={{ width: 40 }}>{(progress * 100).toFixed()}%</span>
           <input

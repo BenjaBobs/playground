@@ -83,7 +83,6 @@ export function SystemsOverview() {
                         offset: 1,
                         opacity: 1,
                         translate: "0% 0%",
-                        color: "black",
                       },
                     ],
                   },
@@ -110,7 +109,12 @@ export function SystemsOverview() {
                     keyframes: [
                       { offset: 0, opacity: 0, translate: "150% 0%" },
                       { offset: 0.8, opacity: 0, translate: "150% 0%" },
-                      { offset: 1, opacity: 1, translate: "0% 0%" },
+                      {
+                        offset: 1,
+                        opacity: 1,
+                        translate: "0% 0%",
+                        color: "green",
+                      },
                     ],
                   },
                 ]}
@@ -196,7 +200,10 @@ function Kana(props: { kana: string; romaji: string; replacement?: boolean }) {
       down
       slim
       className={"kana-" + props.romaji}
-      style={{ marginLeft: props.replacement ? "-25%" : undefined }}
+      style={{
+        marginLeft: props.replacement ? "-25%" : undefined,
+        opacity: props.replacement ? 0 : undefined,
+      }}
     >
       <span>{props.kana}</span>
       <span>{props.romaji}</span>
