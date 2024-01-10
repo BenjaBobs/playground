@@ -161,7 +161,7 @@ export function SystemsOverview() {
                 },
               ]}
             >
-              <KanaTable size={3} noKatakana noRomaji />
+              <KanaTable size={3} />
             </Anim>
           </Stack>
         </Animator>

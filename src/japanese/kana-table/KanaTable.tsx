@@ -1,3 +1,5 @@
+import { ContentBox } from "@src/common/context-box/ContextBox";
+import { Flex } from "@src/common/flex/flex";
 import {
   Kana,
   KanaRow,
@@ -25,17 +27,50 @@ function positionToGridArea(
   return `${rowStart} / ${colStart} / ${rowEnd} / ${colEnd}`;
 }
 
+export function KanaTablePage() {
+  const [romaji, setRomaji] = React.useState(true);
+  const [katakana, setKatakana] = React.useState(true);
+
+  return (
+    <ContentBox>
+      <div>
+        <Flex right justify="center" gap={40}>
+          <div>
+            <input
+              id="romaji-checkbox"
+              checked={romaji}
+              onChange={() => setRomaji(!romaji)}
+              type="checkbox"
+            />
+            <label htmlFor="romaji-checkbox">Romaji</label>
+          </div>
+          <div>
+            <input
+              id="katakana-checkbox"
+              checked={katakana}
+              onChange={() => setKatakana(!katakana)}
+              type="checkbox"
+            />
+            <label htmlFor="katakana-checkbox">Katakana</label>
+          </div>
+        </Flex>
+        <KanaTable romaji={romaji} katakana={katakana} />
+      </div>
+    </ContentBox>
+  );
+}
+
 export function KanaTable(props: {
   rotate?: boolean;
   size?: number;
-  noKatakana?: boolean;
-  noRomaji?: boolean;
+  katakana?: boolean;
+  romaji?: boolean;
 }) {
   return (
     <div
       style={{ fontSize: props.size }}
-      className={`kana-table ${props.noRomaji ? "no-romaji" : ""} ${
-        props.noKatakana ? "no-katakana" : ""
+      className={`kana-table ${props.romaji || "no-romaji"} ${
+        props.katakana || "no-katakana"
       }`}
     >
       <div className="kana-grid">
@@ -71,8 +106,6 @@ export function KanaTable(props: {
                 rowIndex={rowIdx}
                 kana={kana}
                 kanaIndex={idx}
-                noKatakana={props.noKatakana}
-                noRomaji={props.noRomaji}
               />
             ))}
           </React.Fragment>
@@ -103,8 +136,6 @@ function KanaCell(props: {
   kana?: Kana;
   rowIndex: number;
   kanaIndex: number;
-  noKatakana?: boolean;
-  noRomaji?: boolean;
 }) {
   const gridArea = positionToGridArea(
     props.rotate,
