@@ -20,18 +20,17 @@ export function SystemsOverview() {
               {
                 target: [x.querySelector(".kana-ru")!],
                 keyframes: [
-                  { offset: 0, opacity: 1, translate: "0% 0%" },
+                  { offset: 0 },
                   {
-                    offset: 0.8,
+                    offset: 0.5,
                     opacity: 1,
-                    color: "black",
+                    color: "red",
                     translate: "0% 0%",
                   },
                   {
                     offset: 1,
                     opacity: 0,
                     translate: "0% -150%",
-                    color: "red",
                   },
                 ],
               },
@@ -39,7 +38,7 @@ export function SystemsOverview() {
                 target: [x.querySelector(".kana-te")!],
                 keyframes: [
                   { offset: 0, opacity: 0, translate: "150% 0%" },
-                  { offset: 0.8, opacity: 0, translate: "150% 0%" },
+                  { offset: 0.5, opacity: 0, translate: "150% 0%" },
                   {
                     offset: 1,
                     opacity: 1,
@@ -67,11 +66,11 @@ export function SystemsOverview() {
               {
                 target: [x.querySelector(".kana-u")!],
                 keyframes: [
-                  { offset: 0, opacity: 1, translate: "0% 0%" },
+                  { offset: 0, opacity: 1, translate: "0% 0%", color: "black" },
                   {
-                    offset: 0.8,
+                    offset: 0.5,
                     opacity: 1,
-                    color: "black",
+                    color: "red",
                     translate: "0% 0%",
                   },
                   {
@@ -86,7 +85,7 @@ export function SystemsOverview() {
                 target: [x.querySelector(".kana--tte")!],
                 keyframes: [
                   { offset: 0, opacity: 0, translate: "150% 0%" },
-                  { offset: 0.8, opacity: 0, translate: "150% 0%" },
+                  { offset: 0.5, opacity: 0, translate: "150% 0%" },
                   {
                     offset: 1,
                     opacity: 1,
