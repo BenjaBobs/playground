@@ -51,6 +51,7 @@ jobs:
       - name: Build
         run: |
           pnpm install
+          pnpm build:version
           pnpm build
 
       - name: Setup Pages

@@ -1,5 +1,6 @@
 import { JapaneseSiteMap } from "@src/japanese/japanese-sitemap";
 import { MythicHeroesSitemap } from "@src/mythic-heroes/mythic-heroes-sitemap";
+import version from "@src/version.txt?raw";
 
 export const BaseRoute = "playground";
 
@@ -24,7 +25,11 @@ export const siteMap = {
     menu: { name: "Home" },
     element: (
       <div>
-        <span>Welcome to home!</span>
+        <span>
+          Welcome to home!
+          <br />
+          Version: {version}
+        </span>
       </div>
     ),
   },

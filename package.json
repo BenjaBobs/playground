@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build && cp dist/index.html dist/404.html",
+    "build:version": "git log -n 1 --pretty=\"format:%H %aD\" > src/version.txt",
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
   },
