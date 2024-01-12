@@ -1,144 +1,172 @@
 // eslint-disable-next-line @typescript-eslint/no-namespace
 export namespace KanaUtils {
-  export function toRomaji(kana: string): string {
-    let idx = 0;
-    let romaji = "";
-
-    while (idx < kana.length) {
-      let found = false;
-
-      for (let lookahead = 2; lookahead > 0; lookahead--) {
-        const lookup = romajiLookup.get(kana.slice(idx, idx + lookahead));
-
-        if (lookup) {
-          found = true;
-          romaji += lookup;
-          idx += lookahead - 1;
-          break;
-        }
-      }
-
-      if (!found) {
-        romaji += kana[idx];
-      }
-
-      idx++;
-    }
-
-    return romaji;
+  export function toRomaji(input: string) {
+    return transpileLangSymbol(romajiLookup, 3, input);
+  }
+  export function toHiragana(input: string) {
+    return transpileLangSymbol(hiraganaLookup, 3, input);
+  }
+  export function toKatakana(input: string) {
+    return transpileLangSymbol(katakanaLookup, 3, input);
   }
 }
 
 (window as any).KanaUtils = KanaUtils;
 
-const romajiLookup = new Map<string, string>(
-  [
-    ["あ", "a"],
-    ["い", "i"],
-    ["う", "u"],
-    ["え", "e"],
-    ["お", "o"],
-    ["か", "ka"],
-    ["き", "ki"],
-    ["く", "ku"],
-    ["け", "ke"],
-    ["こ", "ko"],
-    ["さ", "sa"],
-    ["し", "shi"],
-    ["す", "su"],
-    ["せ", "se"],
-    ["そ", "so"],
-    ["た", "ta"],
-    ["ち", "chi"],
-    ["つ", "tsu"],
-    ["て", "te"],
-    ["と", "to"],
-    ["な", "na"],
-    ["に", "ni"],
-    ["ぬ", "nu"],
-    ["ね", "ne"],
-    ["の", "no"],
-    ["は", "ha"],
-    ["ひ", "hi"],
-    ["ふ", "fu"],
-    ["へ", "he"],
-    ["ほ", "ho"],
-    ["ま", "ma"],
-    ["み", "mi"],
-    ["む", "mu"],
-    ["め", "me"],
-    ["も", "mo"],
-    ["や", "ya"],
-    ["ゆ", "yu"],
-    ["よ", "yo"],
-    ["ら", "ra"],
-    ["り", "ri"],
-    ["る", "ru"],
-    ["れ", "re"],
-    ["ろ", "ro"],
-    ["わ", "wa"],
-    ["を", "wo"],
-    ["ん", "n"],
-    // Additional entries for dakuten (voiced consonant) characters
-    ["が", "ga"],
-    ["ぎ", "gi"],
-    ["ぐ", "gu"],
-    ["げ", "ge"],
-    ["ご", "go"],
-    ["ざ", "za"],
-    ["じ", "ji"],
-    ["ず", "zu"],
-    ["ぜ", "ze"],
-    ["ぞ", "zo"],
-    ["だ", "da"],
-    ["ぢ", "ji"],
-    ["づ", "zu"],
-    ["で", "de"],
-    ["ど", "do"],
-    ["ば", "ba"],
-    ["び", "bi"],
-    ["ぶ", "bu"],
-    ["べ", "be"],
-    ["ぼ", "bo"],
-    // Entries for handakuten (half-voiced consonant) characters
-    ["ぱ", "pa"],
-    ["ぴ", "pi"],
-    ["ぷ", "pu"],
-    ["ぺ", "pe"],
-    ["ぽ", "po"],
-    // Entries for yōon (compound) characters
-    ["きゃ", "kya"],
-    ["きゅ", "kyu"],
-    ["きょ", "kyo"],
-    ["しゃ", "sha"],
-    ["しゅ", "shu"],
-    ["しょ", "sho"],
-    ["ちゃ", "cha"],
-    ["ちゅ", "chu"],
-    ["ちょ", "cho"],
-    ["にゃ", "nya"],
-    ["にゅ", "nyu"],
-    ["にょ", "nyo"],
-    ["ひゃ", "hya"],
-    ["ひゅ", "hyu"],
-    ["ひょ", "hyo"],
-    ["みゃ", "mya"],
-    ["みゅ", "myu"],
-    ["みょ", "myo"],
-    ["りゃ", "rya"],
-    ["りゅ", "ryu"],
-    ["りょ", "ryo"],
-    ["ぎゃ", "gya"],
-    ["ぎゅ", "gyu"],
-    ["ぎょ", "gyo"],
-    ["じゃ", "ja"],
-    ["じゅ", "ju"],
-    ["じょ", "jo"],
-    ["びゃ", "bya"],
-    ["びゅ", "byu"],
-    ["びょ", "byo"],
-    ["ぴゃ", "pya"],
-    ["ぴゅ", "pyu"],
-    ["ぴょ", "pyo"],
-  ].orderBy((x) => x[0].length, "desc") as [string, string][]
-);
+function transpileLangSymbol(
+  lookup: Map<string, string>,
+  lookahead: number,
+  input: string
+): string {
+  let idx = 0;
+  let transpiled = "";
+
+  while (idx < input.length) {
+    let foundResult = false;
+
+    for (
+      let currentLookAhead = lookahead;
+      currentLookAhead > 0;
+      currentLookAhead--
+    ) {
+      const result = lookup.get(input.slice(idx, idx + currentLookAhead));
+
+      if (result) {
+        foundResult = true;
+        transpiled += result;
+        idx += currentLookAhead - 1;
+        break;
+      }
+    }
+
+    if (!foundResult) {
+      transpiled += input[idx];
+    }
+
+    idx++;
+  }
+
+  return transpiled;
+}
+
+const symbolGroupings: [string, string, string][] = [
+  ["あ", "ア", "a"],
+  ["い", "イ", "i"],
+  ["う", "ウ", "u"],
+  ["え", "エ", "e"],
+  ["お", "オ", "o"],
+  ["か", "カ", "ka"],
+  ["き", "キ", "ki"],
+  ["く", "ク", "ku"],
+  ["け", "ケ", "ke"],
+  ["こ", "コ", "ko"],
+  ["さ", "サ", "sa"],
+  ["し", "シ", "shi"],
+  ["す", "ス", "su"],
+  ["せ", "セ", "se"],
+  ["そ", "ソ", "so"],
+  ["た", "タ", "ta"],
+  ["ち", "チ", "chi"],
+  ["つ", "ツ", "tsu"],
+  ["て", "テ", "te"],
+  ["と", "ト", "to"],
+  ["な", "ナ", "na"],
+  ["に", "ニ", "ni"],
+  ["ぬ", "ヌ", "nu"],
+  ["ね", "ネ", "ne"],
+  ["の", "ノ", "no"],
+  ["は", "ハ", "ha"],
+  ["ひ", "ヒ", "hi"],
+  ["ふ", "フ", "fu"],
+  ["へ", "ヘ", "he"],
+  ["ほ", "ホ", "ho"],
+  ["ま", "マ", "ma"],
+  ["み", "ミ", "mi"],
+  ["む", "ム", "mu"],
+  ["め", "メ", "me"],
+  ["も", "モ", "mo"],
+  ["や", "ヤ", "ya"],
+  ["ゆ", "ユ", "yu"],
+  ["よ", "ヨ", "yo"],
+  ["ら", "ラ", "ra"],
+  ["り", "リ", "ri"],
+  ["る", "ル", "ru"],
+  ["れ", "レ", "re"],
+  ["ろ", "ロ", "ro"],
+  ["わ", "ワ", "wa"],
+  ["を", "ヲ", "wo"],
+  ["ん", "ン", "n"],
+  ["が", "ガ", "ga"],
+  ["ぎ", "ギ", "gi"],
+  ["ぐ", "グ", "gu"],
+  ["げ", "ゲ", "ge"],
+  ["ご", "ゴ", "go"],
+  ["ざ", "ザ", "za"],
+  ["じ", "ジ", "ji"],
+  ["ず", "ズ", "zu"],
+  ["ぜ", "ゼ", "ze"],
+  ["ぞ", "ゾ", "zo"],
+  ["だ", "ダ", "da"],
+  ["ぢ", "ヂ", "ji"],
+  ["づ", "ヅ", "zu"],
+  ["で", "デ", "de"],
+  ["ど", "ド", "do"],
+  ["ば", "バ", "ba"],
+  ["び", "ビ", "bi"],
+  ["ぶ", "ブ", "bu"],
+  ["べ", "ベ", "be"],
+  ["ぼ", "ボ", "bo"],
+  ["ぱ", "パ", "pa"],
+  ["ぴ", "ピ", "pi"],
+  ["ぷ", "プ", "pu"],
+  ["ぺ", "ペ", "pe"],
+  ["ぽ", "ポ", "po"],
+  ["きゃ", "キャ", "kya"],
+  ["きゅ", "キュ", "kyu"],
+  ["きょ", "キョ", "kyo"],
+  ["しゃ", "シャ", "sha"],
+  ["しゅ", "シュ", "shu"],
+  ["しょ", "ショ", "sho"],
+  ["ちゃ", "チャ", "cha"],
+  ["ちゅ", "チュ", "chu"],
+  ["ちょ", "チョ", "cho"],
+  ["にゃ", "ニャ", "nya"],
+  ["にゅ", "ニュ", "nyu"],
+  ["にょ", "ニョ", "nyo"],
+  ["ひゃ", "ヒャ", "hya"],
+  ["ひゅ", "ヒュ", "hyu"],
+  ["ひょ", "ヒョ", "hyo"],
+  ["みゃ", "ミャ", "mya"],
+  ["みゅ", "ミュ", "myu"],
+  ["みょ", "ミョ", "myo"],
+  ["りゃ", "リャ", "rya"],
+  ["りゅ", "リュ", "ryu"],
+  ["りょ", "リョ", "ryo"],
+  ["ぎゃ", "ギャ", "gya"],
+  ["ぎゅ", "ギュ", "gyu"],
+  ["ぎょ", "ギョ", "gyo"],
+  ["じゃ", "ジャ", "ja"],
+  ["じゅ", "ジュ", "ju"],
+  ["じょ", "ジョ", "jo"],
+  ["びゃ", "ビャ", "bya"],
+  ["びゅ", "ビュ", "byu"],
+  ["びょ", "ビョ", "byo"],
+  ["ぴゃ", "ピャ", "pya"],
+  ["ぴゅ", "ピュ", "pyu"],
+  ["ぴょ", "ピョ", "pyo"],
+];
+
+const hiraganaLookup = new Map<string, string>([
+  ...symbolGroupings.map(([hiragana, , romaji]) => [romaji, hiragana]),
+  ...[symbolGroupings.map(([hiragana, katakana]) => [katakana, hiragana])],
+] as [string, string][]);
+
+const romajiLookup = new Map<string, string>([
+  ...symbolGroupings.map(([hiragana, , romaji]) => [hiragana, romaji]),
+  ...[symbolGroupings.map(([, katakana, romaji]) => [katakana, romaji])],
+] as [string, string][]);
+
+const katakanaLookup = new Map<string, string>([
+  ...symbolGroupings.map(([hiragana, katakana]) => [hiragana, katakana]),
+  ...[symbolGroupings.map(([, katakana, romaji]) => [romaji, katakana])],
+] as [string, string][]);
