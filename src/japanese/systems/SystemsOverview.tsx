@@ -2,9 +2,77 @@ import { Anim, Animator } from "@src/common/anim/Animator";
 import { ContentBox } from "@src/common/context-box/ContextBox";
 import { Flex } from "@src/common/flex/flex";
 import { Stack } from "@src/common/stack/Stack";
+import { Table } from "@src/common/table/Table";
 import { KanaTable } from "@src/japanese/kana-table/KanaTable";
+import Highlighter from "react-highlight-words";
 
 import "@src/japanese/systems/SystemsOverview.scss";
+import { KanaUtils } from "@src/japanese/utils/kana-utils";
+
+const teFormTableData: {
+  class: string;
+  endings: string[];
+  transformation: string;
+  example: string;
+  teForm: string;
+}[] = [
+  {
+    class: "Ichidan (一段)",
+    endings: ["る"],
+    transformation: "-て",
+    example: "たべる",
+    teForm: "たべて",
+  },
+  {
+    class: "Godan (五段)",
+    endings: ["す"],
+    transformation: "-して",
+    example: "はなす",
+    teForm: "はなして",
+  },
+  {
+    class: "",
+    endings: ["つ", "る", "う"],
+    transformation: "-って",
+    example: "まつ",
+    teForm: "まって",
+  },
+  {
+    class: "",
+    endings: ["く"],
+    transformation: "-いて",
+    example: "かく",
+    teForm: "かいて",
+  },
+  {
+    class: "",
+    endings: ["ぐ"],
+    transformation: "-いで",
+    example: "およぐ",
+    teForm: "およいで",
+  },
+  {
+    class: "",
+    endings: ["ぬ", "ぶ", "む"],
+    transformation: "-んで",
+    example: "しぬ",
+    teForm: "しんで",
+  },
+  {
+    class: "Irregular",
+    endings: [],
+    transformation: "して",
+    example: "する",
+    teForm: "して",
+  },
+  {
+    class: "",
+    endings: [],
+    transformation: "きて",
+    example: "くる",
+    teForm: "きて",
+  },
+];
 
 export function SystemsOverview() {
   return (
@@ -12,8 +80,103 @@ export function SystemsOverview() {
       <h1>Verbs</h1>
       <h2>Te-form</h2>
 
+      <Table
+        data={teFormTableData}
+        columns={[
+          {
+            name: "Class",
+            render: (row) => row.class,
+          },
+          {
+            name: "Ending",
+            render: (row) => (
+              <Flex down>
+                <div>{row.endings.join("/")}</div>
+                <div>{KanaUtils.toRomaji(row.endings.join("/"))}</div>
+              </Flex>
+            ),
+          },
+          {
+            name: "Example",
+            render: (row) => (
+              <Flex down>
+                <Highlighter
+                  highlightStyle={{
+                    filter: "brightness(1.5)",
+                  }}
+                  searchWords={row.endings}
+                  textToHighlight={row.example}
+                />
+                <Highlighter
+                  highlightStyle={{
+                    filter: "brightness(1.5)",
+                  }}
+                  searchWords={KanaUtils.toRomaji(row.endings.join("/")).split(
+                    "/"
+                  )}
+                  textToHighlight={KanaUtils.toRomaji(row.example)}
+                />
+              </Flex>
+            ),
+          },
+          {
+            name: "→",
+            render: (row) => (
+              <Flex down>
+                <div>{row.transformation}</div>
+                <div>{KanaUtils.toRomaji(row.transformation)}</div>
+              </Flex>
+            ),
+          },
+          {
+            name: "Te-form",
+            render: (row) => (
+              <Flex down>
+                <Highlighter
+                  highlightStyle={{
+                    filter: "brightness(1.5)",
+                  }}
+                  searchWords={[row.transformation.replace("-", "")]}
+                  textToHighlight={row.teForm}
+                />
+                <Highlighter
+                  highlightStyle={{
+                    filter: "brightness(1.5)",
+                  }}
+                  searchWords={[
+                    KanaUtils.toRomaji(row.transformation).replace("-", ""),
+                  ]}
+                  textToHighlight={KanaUtils.toRomaji(row.teForm)}
+                />
+              </Flex>
+            ),
+          },
+        ]}
+        cellStyle={(_, _2, idx) => {
+          // ichidan
+          if (idx === 0) {
+            return {
+              borderBottom: "1px solid lightgray",
+              color: "oklch(0.5 0.1 250)",
+            };
+          }
+
+          // godan
+          if (idx < 6) {
+            return {
+              borderBottom: idx === 5 ? "1px solid lightgray" : undefined,
+              color: "oklch(0.5 0.1 150)",
+            };
+          }
+
+          return {
+            color: "oklch(0.5 0.1 50)",
+          };
+        }}
+      />
+
       <div>
-        <p>Example of taberu</p>
+        <h3>Example of Ichidan (一段) Verb</h3>
         <Animator>
           <Anim
             setup={(x) => [
@@ -37,8 +200,8 @@ export function SystemsOverview() {
               {
                 target: [x.querySelector(".kana-te")!],
                 keyframes: [
-                  { offset: 0, opacity: 0, translate: "150% 0%" },
-                  { offset: 0.5, opacity: 0, translate: "150% 0%" },
+                  { offset: 0, opacity: 0, translate: " 0% 150%" },
+                  { offset: 0.5, opacity: 0, translate: " 0% 150%" },
                   {
                     offset: 1,
                     opacity: 1,
@@ -49,17 +212,19 @@ export function SystemsOverview() {
               },
             ]}
           >
-            <Flex right>
+            <Flex right justify="center">
               <Kana kana="た" romaji="ta" />
               <Kana kana="べ" romaji="be" />
-              <Stack>
-                <Kana kana="る" romaji="ru" />
-                <Kana kana="て" romaji="te" />
-              </Stack>
+              <KanaSwap
+                kana="る"
+                romaji="ru"
+                replacementKana="て"
+                replacementRomaji="te"
+              />
             </Flex>
           </Anim>
         </Animator>
-        <p>Example of au</p>
+        <h3>Example of Verbs う-verb (U-verb)</h3>
         <Animator>
           <Anim
             setup={(x) => [
@@ -82,10 +247,10 @@ export function SystemsOverview() {
                 ],
               },
               {
-                target: [x.querySelector(".kana--tte")!],
+                target: x.querySelectorAll(".kana-t,.kana-te"),
                 keyframes: [
-                  { offset: 0, opacity: 0, translate: "150% 0%" },
-                  { offset: 0.5, opacity: 0, translate: "150% 0%" },
+                  { offset: 0, opacity: 0, translate: "0% 150%" },
+                  { offset: 0.5, opacity: 0, translate: "0% 150%" },
                   {
                     offset: 1,
                     opacity: 1,
@@ -96,16 +261,24 @@ export function SystemsOverview() {
               },
             ]}
           >
-            <Flex right>
+            <Flex right justify="center">
               <Kana kana="あ" romaji="a" />
-              <Stack>
-                <Kana kana="う" romaji="u" />
-                <Kana kana="って" romaji="-tte" />
-              </Stack>
+              <KanaSwap
+                kana="う"
+                romaji="u"
+                replacementKana="っ"
+                replacementRomaji="t"
+              />
+              <KanaSwap
+                kana=""
+                romaji=""
+                replacementKana="て"
+                replacementRomaji="te"
+              />
             </Flex>
           </Anim>
         </Animator>
-        <p>Example of kuru</p>
+        <h3>Example of irregular verb</h3>
         <Animator duration={5}>
           <Stack>
             <Flex right>
@@ -236,6 +409,20 @@ export function SystemsOverview() {
         </Animator>
       </div>
     </ContentBox>
+  );
+}
+
+function KanaSwap(props: {
+  kana: string;
+  romaji: string;
+  replacementKana: string;
+  replacementRomaji: string;
+}) {
+  return (
+    <Stack>
+      <Kana kana={props.kana} romaji={props.romaji} />
+      <Kana kana={props.replacementKana} romaji={props.replacementRomaji} />
+    </Stack>
   );
 }
 

@@ -3,3 +3,32 @@
     display: none;
   }
 }
+
+@font-face {
+  font-family: "Noto Sans JP";
+  src: url(Noto+Sans+JP.woff2) format("woff2");
+}
+
+input,
+button,
+textarea,
+select {
+  font-size: inherit;
+}
+
+body {
+  margin: 0;
+
+  // make default font size for phones more bearable
+  @media (orientation: portrait) {
+    font-size: 1.5vh;
+  }
+
+  font-family: "Noto Sans JP", sans-serif;
+}
+
+mark {
+  background-color: inherit;
+  color: inherit;
+  font-weight: bold;
+}

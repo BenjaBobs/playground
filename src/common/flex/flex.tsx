@@ -1,5 +1,5 @@
 import { MouseEventHandler, PropsWithChildren } from "react";
-import "@src/common/flex/flex.css";
+import "@src/common/flex/flex.scss";
 
 export function Flex(
   props: PropsWithChildren<{

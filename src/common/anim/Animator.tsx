@@ -10,6 +10,7 @@ import {
 
 import "@src/common/anim/Animator.scss";
 import { useEffectRefsPopulated } from "@src/common/hooks/useEffectRefsPopulated";
+import { useCallback } from "react";
 
 type AnimationContext = {
   duration: number;
@@ -43,10 +44,10 @@ function AnimationControls() {
 
   const animationState = useContext(animContext);
 
-  function stopAnimations() {
+  const stopAnimations = useCallback(() => {
     setPlay(false);
     animationState.animations.forEach((anim) => anim.pause());
-  }
+  }, [setPlay, animationState.animations]);
 
   function startAnimations() {
     setPlay(true);
@@ -71,7 +72,7 @@ function AnimationControls() {
     }, 10);
 
     return () => clearInterval(interval);
-  }, [play, setProgress, animationState.duration]);
+  }, [play, setProgress, stopAnimations, animationState.duration]);
 
   function onPlayButtonClicked() {
     if (play) stopAnimations();
@@ -110,7 +111,7 @@ function AnimationControls() {
 export function Anim(
   props: PropsWithChildren<{
     setup: (elem: HTMLElement) => {
-      target: Element[];
+      target: Element[] | NodeList;
       keyframes: Keyframe[];
       fill?: "forwards" | "backwards" | "both" | "none";
       easing?: "ease-in-out" | "ease-in" | "ease-out" | "linear";
@@ -123,31 +124,35 @@ export function Anim(
   useEffectRefsPopulated(() => {
     const setups = props.setup(selfRef.current!);
 
-    const anims = setups.flatMap((setup) =>
-      setup.target.map((target) => {
-        const accumulatedEndFrame: Keyframe = {
-          ...setup.keyframes.reduce(
-            (accum, next) => ({ ...accum, ...next }),
-            {}
-          ),
-          offset: 1,
-        };
+    const anims = setups
+      .flatMap((setup) =>
+        [...setup.target].map((target) => {
+          if (!(target instanceof HTMLElement)) return null;
 
-        const patchedFrames = [
-          ...setup.keyframes.filter((frame) => frame.offset !== 1),
-          accumulatedEndFrame,
-        ];
+          const accumulatedEndFrame: Keyframe = {
+            ...setup.keyframes.reduce(
+              (accum, next) => ({ ...accum, ...next }),
+              {}
+            ),
+            offset: 1,
+          };
 
-        const animation = target.animate(patchedFrames, {
-          fill: "forwards",
-          duration: animationState.duration * 1000,
-        });
+          const patchedFrames = [
+            ...setup.keyframes.filter((frame) => frame.offset !== 1),
+            accumulatedEndFrame,
+          ];
 
-        animation.pause();
+          const animation = target.animate(patchedFrames, {
+            fill: "forwards",
+            duration: animationState.duration * 1000,
+          });
 
-        return animation;
-      })
-    );
+          animation.pause();
+
+          return animation;
+        })
+      )
+      .filter((x) => x !== null) as Animation[];
 
     animationState.animations.push(...anims);
 

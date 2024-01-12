@@ -21,7 +21,7 @@ export type RouteDefinition = {
 
 export const siteMap = {
   home: {
-    relativePath: "",
+    relativePath: "home",
     menu: { name: "Home" },
     element: (
       <div>
@@ -38,6 +38,8 @@ export const siteMap = {
 } satisfies RouteDefinition["nested"];
 
 enhance(siteMap);
+
+console.log(siteMap);
 
 function enhance(routeMap: RouteBranch, parent?: RouteDefinition) {
   Object.entries(routeMap).forEach(([path, route]) => {
