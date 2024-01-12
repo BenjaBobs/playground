@@ -5,7 +5,6 @@ import { Stack } from "@src/common/stack/Stack";
 import { KanaTable } from "@src/japanese/kana-table/KanaTable";
 
 import "@src/japanese/systems/SystemsOverview.scss";
-import React from "react";
 
 export function SystemsOverview() {
   return (
@@ -238,26 +237,6 @@ export function SystemsOverview() {
         </Animator>
       </div>
     </ContentBox>
-  );
-}
-
-function WordAnim(props: {
-  stub: React.ReactNode;
-  stubSuffix: React.ReactNode;
-  teSuffix: React.ReactNode;
-}) {
-  return (
-    <Flex right slim>
-      {props.stub}
-      <span>
-        <span className="te-form-stub-suffix">{props.stubSuffix}</span>
-        <span className="te-form-te-suffix">
-          <Flex right slim itemsPlacement="center">
-            {props.teSuffix}
-          </Flex>
-        </span>
-      </span>
-    </Flex>
   );
 }
 
