@@ -1,14 +1,16 @@
-import { DependencyList, EffectCallback, useEffect, useRef } from "react";
+import { useState } from "react";
+import { DependencyList, EffectCallback, useEffect } from "react";
 
 export function useEffectRefsPopulated(
   effect: EffectCallback,
   deps?: DependencyList
 ): void {
-  const isFirstRender = useRef(true);
+  const [isFirstRender, setIsFirstRender] = useState(true);
 
   useEffect(() => {
-    if (isFirstRender.current === true) {
-      isFirstRender.current = false;
+    if (isFirstRender) {
+      setIsFirstRender(false);
+
       return;
     }
 
