@@ -16,29 +16,96 @@ export function SystemsOverview() {
       <div>
         <p>Example of taberu</p>
         <Animator>
-          <WordAnim
-            stub={
-              <>
-                <Kana kana="た" romaji="ta" />
-                <Kana kana="べ" romaji="be" />
-              </>
-            }
-            stubSuffix={<Kana kana="る" romaji="ru" />}
-            teSuffix={<Kana kana="て" romaji="te" />}
-          />
+          <Anim
+            setup={(x) => [
+              {
+                target: [x.querySelector(".kana-ru")!],
+                keyframes: [
+                  { offset: 0, opacity: 1, translate: "0% 0%" },
+                  {
+                    offset: 0.8,
+                    opacity: 1,
+                    color: "black",
+                    translate: "0% 0%",
+                  },
+                  {
+                    offset: 1,
+                    opacity: 0,
+                    translate: "0% -150%",
+                    color: "red",
+                  },
+                ],
+              },
+              {
+                target: [x.querySelector(".kana-te")!],
+                keyframes: [
+                  { offset: 0, opacity: 0, translate: "150% 0%" },
+                  { offset: 0.8, opacity: 0, translate: "150% 0%" },
+                  {
+                    offset: 1,
+                    opacity: 1,
+                    translate: "0% 0%",
+                    color: "green",
+                  },
+                ],
+              },
+            ]}
+          >
+            <Flex right>
+              <Kana kana="た" romaji="ta" />
+              <Kana kana="べ" romaji="be" />
+              <Stack>
+                <Kana kana="る" romaji="ru" />
+                <Kana kana="て" romaji="te" />
+              </Stack>
+            </Flex>
+          </Anim>
         </Animator>
         <p>Example of au</p>
         <Animator>
-          <WordAnim
-            stub={<Kana kana="あ" romaji="a" />}
-            stubSuffix={<Kana kana="う" romaji="u" />}
-            teSuffix={
-              <>
-                <Kana kana="っ" romaji="-t" />
-                <Kana kana="て" romaji="te" />
-              </>
-            }
-          />
+          <Anim
+            setup={(x) => [
+              {
+                target: [x.querySelector(".kana-u")!],
+                keyframes: [
+                  { offset: 0, opacity: 1, translate: "0% 0%" },
+                  {
+                    offset: 0.8,
+                    opacity: 1,
+                    color: "black",
+                    translate: "0% 0%",
+                  },
+                  {
+                    offset: 1,
+                    opacity: 0,
+                    translate: "0% -150%",
+                    color: "red",
+                  },
+                ],
+              },
+              {
+                target: [x.querySelector(".kana--tte")!],
+                keyframes: [
+                  { offset: 0, opacity: 0, translate: "150% 0%" },
+                  { offset: 0.8, opacity: 0, translate: "150% 0%" },
+                  {
+                    offset: 1,
+                    opacity: 1,
+                    translate: "0% 0%",
+                    color: "green",
+                  },
+                ],
+              },
+            ]}
+          >
+            <Flex right>
+              <Kana kana="あ" romaji="a" />
+              <Stack>
+                <Kana kana="う" romaji="u" />
+                <Kana kana="って" romaji="-tte" />
+              </Stack>
+            </Flex>
+          </Anim>
         </Animator>
         <p>Example of kuru</p>
         <Animator duration={5}>
