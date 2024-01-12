@@ -39,8 +39,6 @@ export const siteMap = {
 
 enhance(siteMap);
 
-console.log(siteMap);
-
 function enhance(routeMap: RouteBranch, parent?: RouteDefinition) {
   Object.entries(routeMap).forEach(([path, route]) => {
     route.parent = parent;

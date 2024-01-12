@@ -55,8 +55,8 @@ const teFormTableData: {
     class: "",
     endings: ["ぬ", "ぶ", "む"],
     transformation: "-んで",
-    example: "しぬ",
-    teForm: "しんで",
+    example: "のむ",
+    teForm: "のんで",
   },
   {
     class: "Irregular",
@@ -176,7 +176,7 @@ export function SystemsOverview() {
       />
 
       <div>
-        <h3>Example of Ichidan (一段) Verb</h3>
+        <h3>Example of Ichidan (一段) verb</h3>
         <Animator>
           <Anim
             setup={(x) => [
@@ -224,7 +224,7 @@ export function SystemsOverview() {
             </Flex>
           </Anim>
         </Animator>
-        <h3>Example of Verbs う-verb (U-verb)</h3>
+        <h3>Example of Godan (五段) verb</h3>
         <Animator>
           <Anim
             setup={(x) => [
@@ -408,6 +408,10 @@ export function SystemsOverview() {
           </Stack>
         </Animator>
       </div>
+      <br />
+      <br />
+      <br />
+      <br />
     </ContentBox>
   );
 }
