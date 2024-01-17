@@ -4,6 +4,7 @@ import {
   Outlet,
   Route,
   Routes,
+  matchPath,
   redirect,
   useMatch,
 } from "react-router-dom";
@@ -58,9 +59,12 @@ function SiteRouter(props: { branch: RouteBranch; parent?: RouteDefinition }) {
 }
 
 function RenderRoute(props: { route: RouteDefinition }) {
-  const isExactMatch = useMatch(props.route.fullPath!);
+  const isMatch = useMatch({ path: props.route.fullPath!, end: false });
+  const isFullMatch = useMatch({ path: props.route.fullPath!, end: true });
 
-  if (isExactMatch && !props.route.element && props.route.nested) {
+  if (isMatch && !isFullMatch) return <Outlet />;
+
+  if (isFullMatch && !props.route.element && props.route.nested) {
     return <Navigate to={Object.values(props.route.nested)[0].relativePath!} />;
   }
 

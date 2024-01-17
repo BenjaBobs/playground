@@ -13,10 +13,7 @@ function NavMenuRow(props: { branch: RouteBranch }) {
   const matchingRoute = Object.values(props.branch)
     .orderBy((x) => x.relativePath?.length, "desc")
     .find((route) =>
-      matchPath(
-        { path: route.relativePath!, end: false },
-        window.location.pathname
-      )
+      matchPath({ path: route.fullPath!, end: false }, window.location.pathname)
     );
 
   return (

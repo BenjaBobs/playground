@@ -1,6 +1,6 @@
-import { SystemsOverview } from "@src/japanese/systems/SystemsOverview";
 import { KanaTablePage } from "@src/japanese/kana-table/KanaTable";
 import { RouteDefinition } from "@src/sitemap";
+import { VerbTeForm } from "@src/japanese/systems/verbs/forms/VerbTeForm";
 
 export const JapaneseSiteMap = {
   menu: { name: "Japanese" },
@@ -11,7 +11,18 @@ export const JapaneseSiteMap = {
     },
     systems: {
       menu: { name: "Systems" },
-      element: <SystemsOverview />,
+      element: <div>Systems</div>,
+      nested: {
+        verbs: {
+          menu: { name: "Verbs" },
+          nested: {
+            teForm: {
+              menu: { name: "Te form" },
+              element: <VerbTeForm />,
+            },
+          },
+        },
+      },
     },
   },
 } satisfies RouteDefinition;
