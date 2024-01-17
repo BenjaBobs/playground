@@ -11,7 +11,6 @@ export function VerbTeForm() {
   return (
     <ContentBox>
       <h1>Te-form</h1>
-
       <Table
         data={teFormTableData}
         columns={[

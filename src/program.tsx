@@ -4,7 +4,6 @@ import {
   Outlet,
   Route,
   Routes,
-  matchPath,
   redirect,
   useMatch,
 } from "react-router-dom";
