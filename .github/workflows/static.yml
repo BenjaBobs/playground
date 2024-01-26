@@ -36,8 +36,8 @@ jobs:
       - name: Build
         run: |
           bun install
-          bun build:version
-          bun build
+          bun run build:version
+          bun run build
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
