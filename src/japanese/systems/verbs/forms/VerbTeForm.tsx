@@ -12,6 +12,7 @@ export function VerbTeForm() {
     <ContentBox>
       <h1>Te-form</h1>
       <Table
+        rowKey={(row) => row.example}
         data={teFormTableData}
         columns={[
           {

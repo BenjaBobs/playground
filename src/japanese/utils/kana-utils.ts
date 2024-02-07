@@ -9,6 +9,9 @@ export namespace KanaUtils {
   export function toKatakana(input: string) {
     return transpileLangSymbol(katakanaLookup, 3, input);
   }
+  export function toAll(input: string) {
+    return [toRomaji(input), toHiragana(input), toKatakana(input)];
+  }
 }
 
 (window as any).KanaUtils = KanaUtils;
