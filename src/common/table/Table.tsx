@@ -1,12 +1,13 @@
 import "@src/common/table/Table.scss";
 
 type ColumnDefinition<T> = {
-  name: string;
+  name: React.ReactNode;
   render?: (row: T, index: number, allRows: T[]) => React.ReactNode;
 };
 
 export function Table<T>(props: {
   data: T[] | undefined;
+  rowKey: (row: T) => string;
   columns: ColumnDefinition<T>[];
   style?: React.CSSProperties;
   cellStyle?: (
@@ -41,7 +42,7 @@ export function Table<T>(props: {
               <td
                 style={props.cellStyle?.(colIdx, row, rowIdx, all)}
                 className="cell"
-                key={colIdx}
+                key={props.rowKey(row) + colIdx}
               >
                 {c.render?.(row, rowIdx, all)}
               </td>
