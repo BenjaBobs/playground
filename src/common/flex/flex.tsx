@@ -17,6 +17,7 @@ export function Flex(
     itemsPlacement?: "center";
     gap?: number | `${number}%`;
     width?: number | `${number}%`;
+    color?: string;
   }>
 ) {
   const classes = [
@@ -34,6 +35,7 @@ export function Flex(
       style={{
         gap: props.gap,
         width: props.width,
+        color: props.color,
         ...props.style,
       }}
       onClick={props.onClick}
@@ -50,5 +52,5 @@ function getDir(object: Parameters<typeof Flex>[0]) {
   if (object.down) return "dir-down";
   if (object.left) return "dir-left";
   if (object.right) return "dir-right";
-  return "dir-down";
+  return "dir-right";
 }
