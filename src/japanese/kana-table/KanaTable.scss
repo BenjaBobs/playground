@@ -93,6 +93,12 @@
     // padding: 1em;
   }
 
+  &.no-hiragana {
+    .hiragana {
+      display: none;
+    }
+  }
+
   &.no-katakana {
     .katakana {
       display: none;

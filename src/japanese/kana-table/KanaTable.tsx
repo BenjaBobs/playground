@@ -28,6 +28,7 @@ function positionToGridArea(
 }
 
 export function KanaTablePage() {
+  const [hiragana, setHiragana] = React.useState(true);
   const [romaji, setRomaji] = React.useState(true);
   const [katakana, setKatakana] = React.useState(true);
 
@@ -37,12 +38,12 @@ export function KanaTablePage() {
         <Flex right justify="center" gap={40}>
           <div>
             <input
-              id="romaji-checkbox"
-              checked={romaji}
-              onChange={() => setRomaji(!romaji)}
+              id="hiragana-checkbox"
+              checked={hiragana}
+              onChange={() => setHiragana(!hiragana)}
               type="checkbox"
             />
-            <label htmlFor="romaji-checkbox">Romaji</label>
+            <label htmlFor="hiragana-checkbox">Hiragana</label>
           </div>
           <div>
             <input
@@ -53,8 +54,17 @@ export function KanaTablePage() {
             />
             <label htmlFor="katakana-checkbox">Katakana</label>
           </div>
+          <div>
+            <input
+              id="romaji-checkbox"
+              checked={romaji}
+              onChange={() => setRomaji(!romaji)}
+              type="checkbox"
+            />
+            <label htmlFor="romaji-checkbox">Romaji</label>
+          </div>
         </Flex>
-        <KanaTable romaji={romaji} katakana={katakana} />
+        <KanaTable hiragana={hiragana} romaji={romaji} katakana={katakana} />
       </div>
     </ContentBox>
   );
@@ -62,6 +72,7 @@ export function KanaTablePage() {
 
 export function KanaTable(props: {
   rotate?: boolean;
+  hiragana?: boolean;
   katakana?: boolean;
   romaji?: boolean;
   style?: CSSProperties;
@@ -71,8 +82,8 @@ export function KanaTable(props: {
     <div
       style={props.style}
       className={`kana-table ${props.className || ""} ${
-        props.romaji || "no-romaji"
-      } ${props.katakana || "no-katakana"}`}
+        props.hiragana || "no-hiragana"
+      } ${props.romaji || "no-romaji"} ${props.katakana || "no-katakana"}`}
     >
       <div className="kana-grid">
         {columns.map((column, columnIdx) => (
