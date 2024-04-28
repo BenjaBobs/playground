@@ -11,19 +11,12 @@ export function Table<T>(props: {
   rowKey: (row: T) => string;
   columns: ColumnDefinition<T>[];
   style?: React.CSSProperties;
-  cellStyle?: (
-    columnIndex: number,
-    row: T,
-    rowIndex: number,
-    allRows: T[]
-  ) => React.CSSProperties | undefined;
+  cellStyle?: (args: {
+    columnIdx: number;
+    row: T;
+    rowIdx: number;
+  }) => React.CSSProperties | undefined;
   className?: string;
-  cellClass?: (
-    columnIndex: number,
-    row: T,
-    rowIndex: number,
-    allRows: T[]
-  ) => string;
 }) {
   const totalWidth = props.columns.reduce(
     (acc, c) => acc + (typeof c.width === "number" ? c.width : 0),
@@ -48,14 +41,14 @@ export function Table<T>(props: {
       <tbody className="body">
         {props.data?.map((row, rowIdx, all) => (
           <tr className="row" key={rowIdx}>
-            {props.columns.map((c, colIdx) => (
+            {props.columns.map((c, columnIdx) => (
               <td
                 style={{
                   width: getWidth(c.width, totalWidth),
-                  ...props.cellStyle?.(colIdx, row, rowIdx, all),
+                  ...props.cellStyle?.({ columnIdx, row, rowIdx }),
                 }}
                 className="cell"
-                key={props.rowKey(row) + colIdx}
+                key={props.rowKey(row) + columnIdx}
               >
                 {c.render?.(row, rowIdx, all)}
               </td>

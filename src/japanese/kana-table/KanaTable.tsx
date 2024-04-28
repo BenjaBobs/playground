@@ -8,9 +8,10 @@ import {
 import "@src/japanese/kana-table/KanaTable.scss";
 import React, { CSSProperties } from "react";
 
-const vowels = ["a", "i", "u", "e", "o"];
+const vowels = ["a", "i", "u", "e", "o"] as const;
 
-const columns = ["", ...vowels];
+const columns = ["", ...vowels] as const;
+type ColumnType = (typeof columns)[number];
 
 function positionToGridArea(
   rotated: boolean | undefined,
@@ -77,6 +78,8 @@ export function KanaTable(props: {
   romaji?: boolean;
   style?: CSSProperties;
   className?: string;
+  ghostColStyle?: (column: ColumnType) => CSSProperties | undefined;
+  ghostCellStyle?: (kana: Kana | undefined) => CSSProperties | undefined;
 }) {
   return (
     <div
@@ -94,7 +97,7 @@ export function KanaTable(props: {
                 gridArea: positionToGridArea(props.rotate, 0, columnIdx),
               }}
             >
-              {column}
+              {column ? column + "♫" : ""}
             </div>
             <div
               style={{
@@ -104,6 +107,7 @@ export function KanaTable(props: {
                   columnIdx,
                   kanaRows.length + 1
                 ),
+                ...props.ghostColStyle?.(column),
               }}
               className={`kana-column-ghost col-${column}`}
             />
@@ -118,6 +122,7 @@ export function KanaTable(props: {
                 rowIndex={rowIdx}
                 kana={kana}
                 kanaIndex={idx}
+                ghostStyle={props.ghostCellStyle?.(kana)}
               />
             ))}
           </React.Fragment>
@@ -148,6 +153,7 @@ function KanaCell(props: {
   kana?: Kana;
   rowIndex: number;
   kanaIndex: number;
+  ghostStyle?: CSSProperties;
 }) {
   const gridArea = positionToGridArea(
     props.rotate,
@@ -208,7 +214,7 @@ function KanaCell(props: {
           </Flex>
         </div>
       )}
-      <div className="kana-cell-ghost" />
+      <div className="kana-cell-ghost" style={props.ghostStyle} />
     </div>
   );
 }

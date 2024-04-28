@@ -4,6 +4,7 @@ import { Flex } from "@src/common/flex/flex";
 import { Stack } from "@src/common/stack/Stack";
 import { Table } from "@src/common/table/Table";
 import { KanaTable } from "@src/japanese/kana-table/KanaTable";
+import { VerbColors } from "@src/japanese/systems/verbs/VerbsOverview";
 import { KanaUtils } from "@src/japanese/utils/kana-utils";
 import Highlighter from "react-highlight-words";
 
@@ -11,6 +12,23 @@ export function VerbTeForm() {
   return (
     <ContentBox>
       <h1>Te-form</h1>
+      <p>
+        The te-form is used to connect sentences, list actions, and is used in
+        many other ways. It is a very important part of the Japanese language.
+      </p>
+      <p>
+        Te-form usually ends with a kana from the e-column and the t-row or
+        d-row of the Kana table.
+      </p>
+      <KanaTable
+        style={{ fontSize: 5, maxWidth: 200, padding: 24 }}
+        ghostCellStyle={(kana) => {
+          return ["te", "de"].includes(kana?.romaji ?? "")
+            ? { border: "2px solid red" }
+            : undefined;
+        }}
+      />
+      <h2>Conjugation table</h2>
       <Table
         rowKey={(row) => row.example}
         data={teFormTableData}
@@ -84,25 +102,25 @@ export function VerbTeForm() {
             ),
           },
         ]}
-        cellStyle={(_, _2, idx) => {
+        cellStyle={({ rowIdx }) => {
           // ichidan
-          if (idx === 0) {
+          if (rowIdx === 0) {
             return {
               borderBottom: "1px solid lightgray",
-              color: "oklch(0.5 0.1 250)",
+              color: VerbColors.ichidan,
             };
           }
 
           // godan
-          if (idx < 6) {
+          if (rowIdx < 6) {
             return {
-              borderBottom: idx === 5 ? "1px solid lightgray" : undefined,
-              color: "oklch(0.5 0.1 150)",
+              borderBottom: rowIdx === 5 ? "1px solid lightgray" : undefined,
+              color: VerbColors.godan,
             };
           }
 
           return {
-            color: "oklch(0.5 0.1 50)",
+            color: VerbColors.irregular,
           };
         }}
       />

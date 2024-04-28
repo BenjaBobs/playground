@@ -75,7 +75,7 @@ export function VerbsOverview() {
           { name: "Description", render: (row) => row.description },
           { name: "Example", render: (row) => row.example },
         ]}
-        cellStyle={(_, row) => {
+        cellStyle={({ row }) => {
           return { color: row.color };
         }}
         style={{ maxWidth: "600px" }}
@@ -126,10 +126,10 @@ export function VerbsOverview() {
         irregularKeigoKuruRomaji?: string;
       }>
         rowKey={(row) => row.name}
-        cellStyle={(colIdx) => {
+        cellStyle={({ columnIdx }) => {
           return {
             borderLeft:
-              device !== "mobile" && colIdx !== 0
+              device !== "mobile" && columnIdx !== 0
                 ? "1px solid rgba(0,0,0, 0.1)"
                 : "none",
             borderBottom: "1px solid rgba(0,0,0, 0.1)",

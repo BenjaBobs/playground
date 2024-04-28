@@ -5,6 +5,10 @@
   height: 100%;
   font-size: 1vh;
 
+  * {
+    box-sizing: border-box;
+  }
+
   .kana-grid {
     display: grid;
     width: 100%;
@@ -17,7 +21,7 @@
   }
 
   .elevate {
-    box-shadow: 0 1px 3px 1px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 0.1em 0.15em 0.05em rgba(0, 0, 0, 0.5);
   }
 
   .kana-cell-ghost {

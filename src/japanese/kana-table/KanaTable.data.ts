@@ -346,4 +346,4 @@ export const kanaRows: KanaRow[] = [
       undefined,
     ],
   },
-];
+] as const;
