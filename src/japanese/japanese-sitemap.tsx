@@ -5,6 +5,7 @@ import { SystemsOverview } from "@src/japanese/systems/SystemsOverview";
 import { VerbsOverview } from "@src/japanese/systems/verbs/VerbsOverview";
 
 import "@src/japanese/japanese-style.scss";
+import { proxy } from "valtio";
 
 export const JapaneseSiteMap = {
   menu: { name: "Japanese" },
@@ -31,3 +32,10 @@ export const JapaneseSiteMap = {
     },
   },
 } satisfies RouteDefinition;
+
+export const JapaneseSettings = proxy({
+  japanese: true,
+  romaji: true,
+  keigo: true,
+  casual: true,
+});

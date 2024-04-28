@@ -1,10 +1,8 @@
 import { Animator, Anim } from "@src/common/anim/Animator";
 import { ContentBox } from "@src/common/context-box/ContextBox";
 import { Flex } from "@src/common/flex/flex";
-import { Grid } from "@src/common/grid/Grid";
 import { Stack } from "@src/common/stack/Stack";
 import { Table } from "@src/common/table/Table";
-import { Txt } from "@src/common/txt/Txt";
 import { KanaTable } from "@src/japanese/kana-table/KanaTable";
 import { KanaUtils } from "@src/japanese/utils/kana-utils";
 import Highlighter from "react-highlight-words";
@@ -108,20 +106,6 @@ export function VerbTeForm() {
           };
         }}
       />
-      <Grid cols="3fr 2fr 2fr 1fr 2fr">
-        <Txt color="blue">
-          some <em>text</em>
-        </Txt>
-        <span>test</span>
-        <span>test</span>
-        <span>test</span>
-        <span>test</span>
-        <span>test</span>
-        <span>test</span>
-        <span>test</span>
-        <span>test</span>
-        <span>test</span>
-      </Grid>
 
       <div>
         <h3>Example of Ichidan (一段) verb</h3>

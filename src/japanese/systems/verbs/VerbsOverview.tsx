@@ -3,6 +3,8 @@ import { Flex } from "@src/common/flex/flex";
 import { useDevice } from "@src/common/hooks/useDeviceSize";
 import { Table } from "@src/common/table/Table";
 import { Md } from "@src/common/txt/Md";
+import { JapaneseSettings } from "@src/japanese/japanese-sitemap";
+import { useSnapshot } from "valtio";
 
 export const VerbColors = {
   godan: "oklch(0.5 0.1 150)",
@@ -12,11 +14,54 @@ export const VerbColors = {
 
 export function VerbsOverview() {
   const device = useDevice();
-
-  console.log(device);
+  const settings = useSnapshot(JapaneseSettings);
 
   return (
     <ContentBox>
+      <Flex center gap={40}>
+        <Flex down>
+          <div>
+            <input
+              id="japanese-checkbox"
+              checked={settings.japanese}
+              onChange={(evt) =>
+                (JapaneseSettings.japanese = evt.target.checked)
+              }
+              type="checkbox"
+            />
+            <label htmlFor="japanese-checkbox">Japanese</label>
+          </div>
+          <div>
+            <input
+              id="romaji-checkbox"
+              checked={settings.romaji}
+              onChange={(evt) => (JapaneseSettings.romaji = evt.target.checked)}
+              type="checkbox"
+            />
+            <label htmlFor="romaji-checkbox">Romaji</label>
+          </div>
+        </Flex>
+        <Flex down>
+          <div>
+            <input
+              id="casual-checkbox"
+              checked={settings.casual}
+              onChange={(evt) => (JapaneseSettings.casual = evt.target.checked)}
+              type="checkbox"
+            />
+            <label htmlFor="casual-checkbox">Casual</label>
+          </div>
+          <div>
+            <input
+              id="keigo-checkbox"
+              checked={settings.keigo}
+              onChange={(evt) => (JapaneseSettings.keigo = evt.target.checked)}
+              type="checkbox"
+            />
+            <label htmlFor="keigo-checkbox">Keigo</label>
+          </div>
+        </Flex>
+      </Flex>
       <h1>Verb types</h1>
       <Table<{
         type: string;
@@ -64,20 +109,30 @@ export function VerbsOverview() {
         name: string;
         description: string;
         ichidanExample: string;
+        ichidanExampleRomaji: string;
         ichidanKeigoExample?: string;
+        ichidanKeigoExampleRomaji?: string;
         godanExample: string;
+        godanExampleRomaji: string;
         godanKeigoExample?: string;
+        godanKeigoExampleRomaji?: string;
         irregularSuru: string;
+        irregularSuruRomaji: string;
         irregularKuru: string;
+        irregularKuruRomaji: string;
         irregularKeigoSuru?: string;
+        irregularKeigoSuruRomaji?: string;
         irregularKeigoKuru?: string;
+        irregularKeigoKuruRomaji?: string;
       }>
         rowKey={(row) => row.name}
         cellStyle={(colIdx) => {
           return {
-            borderLeft: colIdx !== 0 ? "1px solid rgba(0,0,0, 0.1)" : "none",
+            borderLeft:
+              device !== "mobile" && colIdx !== 0
+                ? "1px solid rgba(0,0,0, 0.1)"
+                : "none",
             borderBottom: "1px solid rgba(0,0,0, 0.1)",
-            // padding: colIdx === 0 ? 0 : undefined,
           };
         }}
         columns={[
@@ -100,14 +155,22 @@ export function VerbsOverview() {
             width: device === "mobile" ? 1 : undefined,
             render: (row) => (
               <Flex down center color={VerbColors.ichidan}>
-                <Md text={row.ichidanExample} />
-                {row.ichidanKeigoExample && (
+                {settings.casual && settings.japanese && (
+                  <Md text={row.ichidanExample} />
+                )}
+                {settings.casual && settings.romaji && (
+                  <Md text={row.ichidanExampleRomaji} />
+                )}
+                {settings.keigo && row.ichidanKeigoExample && (
                   <Flex
                     down
                     center
                     style={{ fontStyle: "italic", opacity: 0.8 }}
                   >
-                    <Md text={row.ichidanKeigoExample} />
+                    {settings.japanese && <Md text={row.ichidanKeigoExample} />}
+                    {settings.romaji && (
+                      <Md text={row.ichidanKeigoExampleRomaji} />
+                    )}
                   </Flex>
                 )}
               </Flex>
@@ -122,14 +185,22 @@ export function VerbsOverview() {
             width: device === "mobile" ? 1 : undefined,
             render: (row) => (
               <Flex down color={VerbColors.godan}>
-                <Md text={row.godanExample} />
-                {row.godanKeigoExample && (
+                {settings.casual && settings.japanese && (
+                  <Md text={row.godanExample} />
+                )}
+                {settings.casual && settings.romaji && (
+                  <Md text={row.godanExampleRomaji} />
+                )}
+                {settings.keigo && row.godanKeigoExample && (
                   <Flex
                     down
                     center
                     style={{ fontStyle: "italic", opacity: 0.8 }}
                   >
-                    <Md text={row.godanKeigoExample} />
+                    {settings.japanese && <Md text={row.godanKeigoExample} />}
+                    {settings.romaji && (
+                      <Md text={row.godanKeigoExampleRomaji} />
+                    )}
                   </Flex>
                 )}
               </Flex>
@@ -143,12 +214,32 @@ export function VerbsOverview() {
             render: (row) => (
               <Flex down color={VerbColors.irregular} gap={8}>
                 <Flex down center>
-                  <Md text={row.irregularSuru} />
-                  <Md text={row.irregularKeigoSuru} />
+                  {settings.casual && settings.japanese && (
+                    <Md text={row.irregularSuru} />
+                  )}
+                  {settings.casual && settings.romaji && (
+                    <Md text={row.irregularSuruRomaji} />
+                  )}
+                  {settings.keigo && settings.japanese && (
+                    <Md text={row.irregularKeigoSuru} />
+                  )}
+                  {settings.keigo && settings.romaji && (
+                    <Md text={row.irregularKeigoSuruRomaji} />
+                  )}
                 </Flex>
                 <Flex down center style={{ fontStyle: "italic", opacity: 0.8 }}>
-                  <Md text={row.irregularKuru} />
-                  <Md text={row.irregularKeigoKuru} />
+                  {settings.casual && settings.japanese && (
+                    <Md text={row.irregularKuru} />
+                  )}
+                  {settings.casual && settings.romaji && (
+                    <Md text={row.irregularKuruRomaji} />
+                  )}
+                  {settings.keigo && settings.japanese && (
+                    <Md text={row.irregularKeigoKuru} />
+                  )}
+                  {settings.keigo && settings.romaji && (
+                    <Md text={row.irregularKeigoKuruRomaji} />
+                  )}
                 </Flex>
               </Flex>
             ),
@@ -159,133 +250,215 @@ export function VerbsOverview() {
             name: "Present / Future tense",
             description: "Used to describe a current or future action",
             ichidanExample: "食べる",
-            ichidanKeigoExample: "食べ~る~**ます**",
+            ichidanExampleRomaji: "taberu",
+            ichidanKeigoExample: "食べます",
+            ichidanKeigoExampleRomaji: "tabemasu",
             godanExample: "話す",
+            godanExampleRomaji: "hanasu",
             godanKeigoExample: "話します",
+            godanKeigoExampleRomaji: "hanashimasu",
             irregularSuru: "する",
+            irregularSuruRomaji: "suru",
             irregularKuru: "くる",
+            irregularKuruRomaji: "kuru",
             irregularKeigoSuru: "します",
+            irregularKeigoSuruRomaji: "shimasu",
             irregularKeigoKuru: "きます",
+            irregularKeigoKuruRomaji: "kimasu",
           },
           {
             name: "Present / Future negative tense",
             description:
               "Used to describe a current or future action, but with a negative meaning",
-            ichidanExample: "食べない",
-            ichidanKeigoExample: "食べません",
-            godanExample: "話さない",
-            godanKeigoExample: "話しません",
+            ichidanExample: "食べ~る~**ない**",
+            ichidanExampleRomaji: "tabe~ru~**nai**",
+            ichidanKeigoExample: "食べま~す~**せん**",
+            ichidanKeigoExampleRomaji: "tabema~su~**sen**",
+            godanExample: "話~す~**さない**",
+            godanExampleRomaji: "hana~su~**sanai**",
+            godanKeigoExample: "話しま~す~**せん**",
+            godanKeigoExampleRomaji: "hanashima~su~**sen**",
             irregularSuru: "しない",
+            irregularSuruRomaji: "shinai",
             irregularKuru: "こない",
+            irregularKuruRomaji: "konai",
             irregularKeigoSuru: "しません",
+            irregularKeigoSuruRomaji: "shimasen",
             irregularKeigoKuru: "きません",
+            irregularKeigoKuruRomaji: "kimasen",
           },
           {
             name: "Past tense",
             description: "Used to describe a past action",
-            ichidanExample: "食べた",
-            ichidanKeigoExample: "食べました",
-            godanExample: "話した",
-            godanKeigoExample: "話しました",
+            ichidanExample: "食べ~る~**た**",
+            ichidanExampleRomaji: "tabe~ru~**ta**",
+            ichidanKeigoExample: "食べま~す~**した**",
+            ichidanKeigoExampleRomaji: "tabema~su~**shita**",
+            godanExample: "話~す~**した**",
+            godanExampleRomaji: "hana~su~**shita**",
+            godanKeigoExample: "話しま~す~**した**",
+            godanKeigoExampleRomaji: "hanashima~su~**shita**",
             irregularSuru: "した",
+            irregularSuruRomaji: "shita",
             irregularKuru: "きた",
+            irregularKuruRomaji: "kita",
             irregularKeigoSuru: "しました",
+            irregularKeigoSuruRomaji: "shimashita",
             irregularKeigoKuru: "きました",
+            irregularKeigoKuruRomaji: "kimashita",
           },
           {
             name: "Past negative tense",
             description:
               "Used to describe a past action, but with a negative meaning",
-            ichidanExample: "食べなかった",
-            ichidanKeigoExample: "食べませんでした",
-            godanExample: "話さなかった",
-            godanKeigoExample: "話しませんでした",
+            ichidanExample: "食べ**なかった**",
+            ichidanExampleRomaji: "tabe**nakatta**",
+            ichidanKeigoExample: "食べま**せんでした**",
+            ichidanKeigoExampleRomaji: "tabe**masen deshita**",
+            godanExample: "話**さなかった**",
+            godanExampleRomaji: "hana**sanakatta**",
+            godanKeigoExample: "話**しませんでした**",
+            godanKeigoExampleRomaji: "hana**shimasen deshita**",
             irregularSuru: "しなかった",
+            irregularSuruRomaji: "shinakatta",
             irregularKuru: "こなかった",
+            irregularKuruRomaji: "konakatta",
             irregularKeigoSuru: "しませんでした",
+            irregularKeigoSuruRomaji: "shimasen deshita",
             irregularKeigoKuru: "きませんでした",
+            irregularKeigoKuruRomaji: "kimasen deshita",
           },
           {
             name: "Te form",
             description: "Used for connecting verbs or for making requests",
-            ichidanExample: "食べて",
-            ichidanKeigoExample: "食べまして",
-            godanExample: "話して",
-            godanKeigoExample: "話しまして",
+            ichidanExample: "食べ**て**",
+            ichidanExampleRomaji: "tabe**te**",
+            ichidanKeigoExample: "食べ**まして**",
+            ichidanKeigoExampleRomaji: "tabe**mashite**",
+            godanExample: "話**して**",
+            godanExampleRomaji: "hana**shite**",
+            godanKeigoExample: "話**しまして**",
+            godanKeigoExampleRomaji: "hana**shimashite**",
             irregularSuru: "して",
+            irregularSuruRomaji: "shite",
             irregularKuru: "きて",
+            irregularKuruRomaji: "kite",
             irregularKeigoSuru: "しまして",
+            irregularKeigoSuruRomaji: "shimashite",
             irregularKeigoKuru: "きまして",
+            irregularKeigoKuruRomaji: "kimashite",
           },
           {
             name: "Tai form",
             description: "Used to express desire to do something",
-            ichidanExample: "食べたい",
-            ichidanKeigoExample: "食べたいです",
-            godanExample: "話したい",
-            godanKeigoExample: "話したいです",
+            ichidanExample: "食べ**たい**",
+            ichidanExampleRomaji: "tabe**tai**",
+            ichidanKeigoExample: "食べ**たいです**",
+            ichidanKeigoExampleRomaji: "tabe**tai desu**",
+            godanExample: "話**したい**",
+            godanExampleRomaji: "hana**shitai**",
+            godanKeigoExample: "話**したいです**",
+            godanKeigoExampleRomaji: "hana**shitai desu**",
             irregularSuru: "したい",
+            irregularSuruRomaji: "shitai",
+            irregularKeigoSuru: "したいです",
+            irregularKeigoSuruRomaji: "shitai desu",
             irregularKuru: "きたい",
+            irregularKeigoKuru: "きたいです",
+            irregularKuruRomaji: "kitai",
+            irregularKeigoKuruRomaji: "kitai desu",
           },
           {
             name: "Volitional form",
             description: "Used to express intention or determination",
             ichidanExample: "食べよう",
+            ichidanExampleRomaji: "tabeyou",
             ichidanKeigoExample: "食べましょう",
+            ichidanKeigoExampleRomaji: "tabemashou",
             godanExample: "話そう",
+            godanExampleRomaji: "hanasou",
             godanKeigoExample: "話しましょう",
+            godanKeigoExampleRomaji: "hanashimashou",
             irregularSuru: "しよう",
+            irregularSuruRomaji: "shiyou",
             irregularKuru: "こよう",
+            irregularKuruRomaji: "koyou",
             irregularKeigoSuru: "しましょう",
+            irregularKeigoSuruRomaji: "shimashou",
             irregularKeigoKuru: "きましょう",
+            irregularKeigoKuruRomaji: "kimashou",
           },
           {
             name: "Imperative form",
             description: "Used to give commands",
             ichidanExample: "食べろ",
+            ichidanExampleRomaji: "tabero",
             godanExample: "話せ",
+            godanExampleRomaji: "hanase",
             irregularSuru: "しろ",
+            irregularSuruRomaji: "shiro",
             irregularKuru: "こい",
+            irregularKuruRomaji: "koi",
           },
           {
             name: "Passive form",
             description: "Used to describe an action being done to the subject",
             ichidanExample: "食べられる",
+            ichidanExampleRomaji: "taberareru",
             godanExample: "話される",
+            godanExampleRomaji: "hanasareru",
             irregularSuru: "される",
+            irregularSuruRomaji: "sareru",
             irregularKuru: "こられる",
+            irregularKuruRomaji: "korareru",
           },
           {
             name: "Conditional form",
             description: "Used to describe a hypothetical situation",
             ichidanExample: "食べたら",
+            ichidanExampleRomaji: "tabetara",
             godanExample: "話したら",
+            godanExampleRomaji: "hanashitara",
             irregularSuru: "したら",
+            irregularSuruRomaji: "shitara",
             irregularKuru: "きたら",
+            irregularKuruRomaji: "kitara",
           },
           {
             name: "Provisional Conditional form",
             description: "Used to describe a tentative or uncertain situation",
             ichidanExample: "食べれば",
+            ichidanExampleRomaji: "tabereba",
             godanExample: "話せば",
+            godanExampleRomaji: "hanaseba",
             irregularSuru: "すれば",
+            irregularSuruRomaji: "sureba",
             irregularKuru: "くれば",
+            irregularKuruRomaji: "kureba",
           },
           {
             name: "Causative form",
             description: "Used to describe causing someone to do something",
             ichidanExample: "食べさせる",
+            ichidanExampleRomaji: "tabesaseru",
             godanExample: "話させる",
+            godanExampleRomaji: "hanasaseru",
             irregularSuru: "させる",
+            irregularSuruRomaji: "saseru",
             irregularKuru: "こさせる",
+            irregularKuruRomaji: "kosaseru",
           },
           {
             name: "Potential form",
             description: "Used to describe ability to do something",
             ichidanExample: "食べられる",
+            ichidanExampleRomaji: "taberareru",
             godanExample: "話せる",
+            godanExampleRomaji: "hanaseru",
             irregularSuru: "できる",
+            irregularSuruRomaji: "dekiru",
             irregularKuru: "こられる",
+            irregularKuruRomaji: "korareru",
           },
         ]}
       />
