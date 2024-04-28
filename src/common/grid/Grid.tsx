@@ -1,26 +1,11 @@
 import { CSSProperties, PropsWithChildren } from "react";
 
-type CSSLength =
-  | number
-  | `${number}%`
-  | `${number}px`
-  | `${number}em`
-  | `${number}rem`;
-
-type GridDimension =
-  | CSSLength
-  | "auto"
-  | "min-content"
-  | "max-content"
-  | "fit-content"
-  | "minmax(auto, auto)"
-  | `${number}fr`;
-
 export function Grid(
   props: PropsWithChildren<{
+    style?: CSSProperties;
     className?: string;
-    columns: GridDimension[];
-    rows: GridDimension[];
+    cols: string;
+    rows?: string;
     gap?: number | [number, number];
   }>
 ) {
@@ -30,9 +15,10 @@ export function Grid(
 
   const style: CSSProperties = {
     display: "grid",
-    gridTemplateColumns: props.columns.join(" "),
-    gridTemplateRows: props.rows.join(" "),
+    gridTemplateColumns: props.cols,
+    gridTemplateRows: props.rows,
     gap: `${gap[0]}px ${gap[1]}px`,
+    ...props.style,
   };
 
   return (
@@ -44,15 +30,17 @@ export function Grid(
 
 export function GridItem(
   props: PropsWithChildren<{
-    at: [number, number];
-    to?: [number, number];
-    className?: string;
     style?: CSSProperties;
+    className?: string;
+    row: string;
+    col: string;
+    pad?: CSSProperties["padding"];
   }>
 ) {
   const style: CSSProperties = {
-    gridColumn: `${props.at[0]} / ${props.to?.[0] ?? props.at[0]}`,
-    gridRow: `${props.at[1]} / ${props.to?.[1] ?? props.at[1]}`,
+    gridColumn: props.col,
+    gridRow: props.row,
+    padding: props.pad,
     ...props.style,
   };
 

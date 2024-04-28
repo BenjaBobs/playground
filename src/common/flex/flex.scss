@@ -6,6 +6,16 @@
     height: fit-content;
   }
 
+  &.full {
+    width: 100%;
+    height: 100%;
+  }
+
+  &.center {
+    justify-content: center;
+    align-items: center;
+  }
+
   &.dir-up {
     flex-direction: column-reverse;
   }

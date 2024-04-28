@@ -8,10 +8,12 @@ export function Flex(
     onContextMenu?: MouseEventHandler<HTMLDivElement>;
     className?: string;
     slim?: boolean;
+    full?: boolean;
     up?: boolean;
     down?: boolean;
     left?: boolean;
     right?: boolean;
+    center?: boolean;
     justify?: React.CSSProperties["justifyContent"];
     itemsSizing?: "even";
     itemsPlacement?: "center";
@@ -28,6 +30,8 @@ export function Flex(
     props.itemsPlacement && "items-placement-" + props.itemsPlacement,
     props.className,
     props.slim && "slim",
+    props.full && "full",
+    props.center && "center",
   ];
 
   return (

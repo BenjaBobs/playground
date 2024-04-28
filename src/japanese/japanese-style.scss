@@ -1,0 +1,13 @@
+.\/japanese {
+  strong,
+  em {
+    font-weight: bold;
+    filter: brightness(1.5);
+  }
+
+  del,
+  s {
+    color: red;
+    opacity: 0.5;
+  }
+}

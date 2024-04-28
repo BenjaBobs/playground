@@ -5,10 +5,11 @@ import {
   Route,
   Routes,
   redirect,
+  useLocation,
   useMatch,
 } from "react-router-dom";
 import { NavMenu } from "@src/nav-menu";
-import React from "react";
+import React, { PropsWithChildren } from "react";
 import ReactDOM from "react-dom/client";
 
 import.meta.glob("./utils/extensions/*.ts", {
@@ -27,11 +28,32 @@ root.id = "root";
 ReactDOM.createRoot(root).render(
   <React.StrictMode>
     <BrowserRouter>
-      <NavMenu />
-      <SiteRouter key="siteMap" branch={siteMap} />
+      <RouteToClass>
+        <NavMenu />
+        <SiteRouter key="siteMap" branch={siteMap} />
+      </RouteToClass>
     </BrowserRouter>
   </React.StrictMode>
 );
+
+function RouteToClass(props: PropsWithChildren) {
+  const location = useLocation();
+  const pathParts = location.pathname
+    .split("/")
+    .filter((p) => p)
+    .slice(1);
+
+  // assemble each path part with the previous ones
+  const classNames = [];
+  let cumulativeClassName = "";
+  for (let i = 0; i < pathParts.length; i++) {
+    const currentClassName = cumulativeClassName + "/" + pathParts[i];
+    cumulativeClassName = currentClassName;
+    classNames.push(currentClassName);
+  }
+
+  return <div className={classNames.join(" ")}>{props.children}</div>;
+}
 
 function SiteRouter(props: { branch: RouteBranch; parent?: RouteDefinition }) {
   return (
@@ -42,7 +64,6 @@ function SiteRouter(props: { branch: RouteBranch; parent?: RouteDefinition }) {
           path={route.relativePath}
           element={<RenderRoute route={route} />}
           loader={async () => {
-            console.log("loading", route.relativePath);
             if (!route.element && route.nested)
               return redirect(Object.values(route.nested)[0].fullPath!);
           }}

@@ -4,6 +4,8 @@ import { VerbTeForm } from "@src/japanese/systems/verbs/forms/VerbTeForm";
 import { SystemsOverview } from "@src/japanese/systems/SystemsOverview";
 import { VerbsOverview } from "@src/japanese/systems/verbs/VerbsOverview";
 
+import "@src/japanese/japanese-style.scss";
+
 export const JapaneseSiteMap = {
   menu: { name: "Japanese" },
   nested: {
