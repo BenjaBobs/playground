@@ -14,7 +14,7 @@ export type RouteDefinition = {
   fullPath?: string;
   element?: JSX.Element;
   menu?: {
-    name: string;
+    name: React.ReactNode;
   };
   nested?: RouteBranch;
 };

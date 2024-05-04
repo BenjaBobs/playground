@@ -1,4 +1,4 @@
-import { MouseEventHandler, PropsWithChildren } from "react";
+import { CSSProperties, MouseEventHandler, PropsWithChildren } from "react";
 import "@src/common/flex/flex.scss";
 
 export function Flex(
@@ -17,9 +17,12 @@ export function Flex(
     justify?: React.CSSProperties["justifyContent"];
     itemsSizing?: "even";
     itemsPlacement?: "center";
+    pad?: CSSProperties["padding"];
     gap?: number | `${number}%`;
     width?: number | `${number}%`;
     color?: string;
+    bg?: CSSProperties["background"];
+    border?: CSSProperties["border"];
   }>
 ) {
   const classes = [
@@ -40,6 +43,9 @@ export function Flex(
         gap: props.gap,
         width: props.width,
         color: props.color,
+        padding: props.pad,
+        background: props.bg,
+        border: props.border,
         ...props.style,
       }}
       onClick={props.onClick}

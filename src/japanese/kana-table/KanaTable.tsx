@@ -1,5 +1,6 @@
 import { ContentBox } from "@src/common/context-box/ContextBox";
 import { Flex } from "@src/common/flex/flex";
+import { JapaneseSettings } from "@src/japanese/japanese-sitemap";
 import {
   Kana,
   KanaRow,
@@ -7,6 +8,7 @@ import {
 } from "@src/japanese/kana-table/KanaTable.data";
 import "@src/japanese/kana-table/KanaTable.scss";
 import React, { CSSProperties } from "react";
+import { useSnapshot } from "valtio";
 
 const vowels = ["a", "i", "u", "e", "o"] as const;
 
@@ -29,44 +31,15 @@ function positionToGridArea(
 }
 
 export function KanaTablePage() {
-  const [hiragana, setHiragana] = React.useState(true);
-  const [romaji, setRomaji] = React.useState(true);
-  const [katakana, setKatakana] = React.useState(true);
+  const snap = useSnapshot(JapaneseSettings);
 
   return (
     <ContentBox>
-      <div>
-        <Flex right justify="center" gap={40}>
-          <div>
-            <input
-              id="hiragana-checkbox"
-              checked={hiragana}
-              onChange={() => setHiragana(!hiragana)}
-              type="checkbox"
-            />
-            <label htmlFor="hiragana-checkbox">Hiragana</label>
-          </div>
-          <div>
-            <input
-              id="katakana-checkbox"
-              checked={katakana}
-              onChange={() => setKatakana(!katakana)}
-              type="checkbox"
-            />
-            <label htmlFor="katakana-checkbox">Katakana</label>
-          </div>
-          <div>
-            <input
-              id="romaji-checkbox"
-              checked={romaji}
-              onChange={() => setRomaji(!romaji)}
-              type="checkbox"
-            />
-            <label htmlFor="romaji-checkbox">Romaji</label>
-          </div>
-        </Flex>
-        <KanaTable hiragana={hiragana} romaji={romaji} katakana={katakana} />
-      </div>
+      <KanaTable
+        hiragana={snap.hiragana}
+        romaji={snap.romaji}
+        katakana={snap.katakana}
+      />
     </ContentBox>
   );
 }

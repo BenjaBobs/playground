@@ -1,0 +1,13 @@
+.dropdown {
+  position: relative;
+
+  .dropdown-content {
+    position: absolute;
+    transform-origin: top left;
+    z-index: 2;
+
+    // place center of the dropdown button
+    // left: 50%;
+    // translate: -50%;
+  }
+}

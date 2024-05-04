@@ -3,12 +3,24 @@ import { RouteDefinition } from "@src/sitemap";
 import { VerbTeForm } from "@src/japanese/systems/verbs/forms/VerbTeForm";
 import { SystemsOverview } from "@src/japanese/systems/SystemsOverview";
 import { VerbsOverview } from "@src/japanese/systems/verbs/VerbsOverview";
-import { proxy } from "valtio";
+import { proxy, useSnapshot } from "valtio";
 import { VerbPresentForm } from "@src/japanese/systems/verbs/forms/VerbPresentForm";
 import "@src/japanese/japanese-style.scss";
+import { Flex } from "@src/common/flex/flex";
+import { Dropdown } from "@src/common/windows/dropdown/Dropdown";
+import { CheckBox } from "@src/common/input/checkbox/CheckBox";
 
 export const JapaneseSiteMap = {
-  menu: { name: "Japanese" },
+  menu: {
+    name: (
+      <Flex gap={8} justify="space-around">
+        <span>Japanese</span>
+        <Dropdown trigger="click" content={<JapaneseSettingsCard />}>
+          <span className="clickable">&#128736;</span>
+        </Dropdown>
+      </Flex>
+    ),
+  },
   nested: {
     kana: {
       menu: { name: "Kana table" },
@@ -37,8 +49,72 @@ export const JapaneseSiteMap = {
   },
 } satisfies RouteDefinition;
 
+export function JapaneseSettingsCard() {
+  const snap = useSnapshot(JapaneseSettings);
+
+  return (
+    <Flex down bg="white" border="1px solid black">
+      <h3>Settings</h3>
+      <Flex center gap={40}>
+        <Flex down>
+          <CheckBox
+            checked={snap.japanese}
+            onChange={(value) => {
+              return (JapaneseSettings.japanese =
+                JapaneseSettings.hiragana =
+                JapaneseSettings.katakana =
+                  value);
+            }}
+          >
+            Japanese
+          </CheckBox>
+          <CheckBox
+            checked={snap.hiragana}
+            onChange={(value) => {
+              return (JapaneseSettings.hiragana = JapaneseSettings.japanese =
+                value);
+            }}
+          >
+            Hiragana
+          </CheckBox>
+          <CheckBox
+            checked={snap.katakana}
+            onChange={(value) =>
+              (JapaneseSettings.katakana = JapaneseSettings.japanese = value)
+            }
+          >
+            Katakana
+          </CheckBox>
+          <CheckBox
+            checked={snap.romaji}
+            onChange={(value) => (JapaneseSettings.romaji = value)}
+          >
+            Romaji
+          </CheckBox>
+        </Flex>
+        <Flex down>
+          <CheckBox
+            checked={snap.casual}
+            onChange={(value) => (JapaneseSettings.casual = value)}
+          >
+            Casual
+          </CheckBox>
+          <CheckBox
+            checked={snap.keigo}
+            onChange={(value) => (JapaneseSettings.keigo = value)}
+          >
+            Keigo
+          </CheckBox>
+        </Flex>
+      </Flex>
+    </Flex>
+  );
+}
+
 export const JapaneseSettings = proxy({
   japanese: true,
+  hiragana: true,
+  katakana: true,
   romaji: true,
   keigo: true,
   casual: true,
