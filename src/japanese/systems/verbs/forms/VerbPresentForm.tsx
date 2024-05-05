@@ -13,26 +13,6 @@ export function VerbPresentForm() {
 
   return (
     <ContentBox>
-      <Flex down>
-        <div>
-          <input
-            id="japanese-checkbox"
-            checked={settings.japanese}
-            onChange={(evt) => (JapaneseSettings.japanese = evt.target.checked)}
-            type="checkbox"
-          />
-          <label htmlFor="japanese-checkbox">Japanese</label>
-        </div>
-        <div>
-          <input
-            id="romaji-checkbox"
-            checked={settings.romaji}
-            onChange={(evt) => (JapaneseSettings.romaji = evt.target.checked)}
-            type="checkbox"
-          />
-          <label htmlFor="romaji-checkbox">Romaji</label>
-        </div>
-      </Flex>
       <h1>Present form</h1>
       <p>
         The present form of a verb is used to describe actions that are

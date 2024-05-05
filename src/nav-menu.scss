@@ -1,6 +1,10 @@
 .nav-menu-item {
   padding: 0.5rem 1rem;
 
+  &.extra {
+    padding-left: 0;
+  }
+
   &:hover {
     background-color: rgba(0, 0, 0, 0.05);
   }

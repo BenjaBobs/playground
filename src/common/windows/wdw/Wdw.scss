@@ -1,0 +1,11 @@
+.wdw {
+  position: relative;
+  width: 0;
+  height: 0;
+  z-index: 2;
+
+  .wdw-content {
+    position: absolute;
+    transform-origin: top left;
+  }
+}

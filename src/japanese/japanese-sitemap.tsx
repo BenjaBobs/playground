@@ -15,10 +15,12 @@ export const JapaneseSiteMap = {
     name: (
       <Flex gap={8} justify="space-around">
         <span>Japanese</span>
-        <Dropdown trigger="click" content={<JapaneseSettingsCard />}>
-          <span className="clickable">&#128736;</span>
-        </Dropdown>
       </Flex>
+    ),
+    extra: (
+      <Dropdown trigger="click" content={<JapaneseSettingsCard />}>
+        <span className="clickable">&#128736;</span>
+      </Dropdown>
     ),
   },
   nested: {
@@ -53,35 +55,25 @@ export function JapaneseSettingsCard() {
   const snap = useSnapshot(JapaneseSettings);
 
   return (
-    <Flex down bg="white" border="1px solid black">
+    <Flex down bg="white" pad={8} border="1px solid black">
       <h3>Settings</h3>
       <Flex center gap={40}>
         <Flex down>
           <CheckBox
             checked={snap.japanese}
-            onChange={(value) => {
-              return (JapaneseSettings.japanese =
-                JapaneseSettings.hiragana =
-                JapaneseSettings.katakana =
-                  value);
-            }}
+            onChange={(value) => (JapaneseSettings.japanese = value)}
           >
             Japanese
           </CheckBox>
           <CheckBox
             checked={snap.hiragana}
-            onChange={(value) => {
-              return (JapaneseSettings.hiragana = JapaneseSettings.japanese =
-                value);
-            }}
+            onChange={(value) => (JapaneseSettings.hiragana = value)}
           >
             Hiragana
           </CheckBox>
           <CheckBox
             checked={snap.katakana}
-            onChange={(value) =>
-              (JapaneseSettings.katakana = JapaneseSettings.japanese = value)
-            }
+            onChange={(value) => (JapaneseSettings.katakana = value)}
           >
             Katakana
           </CheckBox>

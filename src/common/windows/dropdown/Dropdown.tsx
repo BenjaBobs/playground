@@ -1,9 +1,10 @@
-import React, { PropsWithChildren, useRef, useState } from "react";
+import React, { PropsWithChildren, useState } from "react";
 import "@src/common/windows/dropdown/Dropdown.scss";
-import { useEffectRefsPopulated } from "@src/common/hooks/useEffectRefsPopulated";
+import { Wdw } from "@src/common/windows/wdw/Wdw";
 
 export function Dropdown(
   props: PropsWithChildren<{
+    style?: React.CSSProperties;
     content: React.ReactNode;
     trigger?: "click" | "hover";
   }>
@@ -11,67 +12,22 @@ export function Dropdown(
   const trigger = props.trigger ?? "click";
   const [isOpen, setIsOpen] = useState(false);
 
-  const popupRef = useRef<HTMLDivElement>(null);
-  const animationRef = useRef<Animation>();
-
-  useEffectRefsPopulated(() => {
-    animationRef.current = popupRef.current!.animate(
-      [
-        { transform: "scale(0, 0)", offset: 0 },
-        { transform: "scale(0.1, 0.5)", offset: 0.3 },
-        { transform: "scale(0.1, 1)", offset: 0.7 },
-        { transform: "scale(1, 1)", offset: 1 },
-      ],
-      { duration: 200, easing: "ease", fill: "both" }
-    );
-    animationRef.current.pause();
-    animationRef.current.currentTime = 0;
-
-    animationRef.current!.onfinish = () => {
-      if (animationRef.current!.playbackRate > 0) {
-        setIsOpen(true);
-      } else {
-        setIsOpen(false);
-      }
-    };
-  }, [popupRef.current]);
-
-  const openDropdown = () => {
-    if (isOpen) return;
-    setIsOpen(true);
-
-    animationRef.current!.playbackRate = 1;
-    if (animationRef.current?.playState !== "running")
-      animationRef.current!.play();
-  };
-
-  const closeDropdown = () => {
-    if (!isOpen) return;
-    animationRef.current!.playbackRate = -1;
-    if (animationRef.current?.playState !== "running")
-      animationRef.current!.play();
-  };
-
-  const toggleDropdown = () => {
-    if (isOpen) closeDropdown();
-    else openDropdown();
-  };
-
   return (
     <div
+      style={props.style}
+      className="dropdown"
       onClick={(evt) => {
         evt.preventDefault();
         evt.stopPropagation();
       }}
-      className={`dropdown`}
       onMouseEnter={() => {
         if (trigger === "hover") {
-          openDropdown();
+          setIsOpen(true);
         }
       }}
       onMouseLeave={() => {
         if (trigger === "hover") {
-          closeDropdown();
+          setIsOpen(false);
         }
       }}
     >
@@ -79,15 +35,13 @@ export function Dropdown(
         className="dropdown-trigger"
         onClick={() => {
           if (trigger === "click") {
-            toggleDropdown();
+            setIsOpen(!isOpen);
           }
         }}
       >
         {props.children}
       </div>
-      <div ref={popupRef} className="dropdown-content">
-        {isOpen && props.content}
-      </div>
+      <Wdw open={isOpen}>{props.content}</Wdw>
     </div>
   );
 }

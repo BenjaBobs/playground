@@ -18,50 +18,6 @@ export function VerbsOverview() {
 
   return (
     <ContentBox>
-      <Flex center gap={40}>
-        <Flex down>
-          <div>
-            <input
-              id="japanese-checkbox"
-              checked={settings.japanese}
-              onChange={(evt) =>
-                (JapaneseSettings.japanese = evt.target.checked)
-              }
-              type="checkbox"
-            />
-            <label htmlFor="japanese-checkbox">Japanese</label>
-          </div>
-          <div>
-            <input
-              id="romaji-checkbox"
-              checked={settings.romaji}
-              onChange={(evt) => (JapaneseSettings.romaji = evt.target.checked)}
-              type="checkbox"
-            />
-            <label htmlFor="romaji-checkbox">Romaji</label>
-          </div>
-        </Flex>
-        <Flex down>
-          <div>
-            <input
-              id="casual-checkbox"
-              checked={settings.casual}
-              onChange={(evt) => (JapaneseSettings.casual = evt.target.checked)}
-              type="checkbox"
-            />
-            <label htmlFor="casual-checkbox">Casual</label>
-          </div>
-          <div>
-            <input
-              id="keigo-checkbox"
-              checked={settings.keigo}
-              onChange={(evt) => (JapaneseSettings.keigo = evt.target.checked)}
-              type="checkbox"
-            />
-            <label htmlFor="keigo-checkbox">Keigo</label>
-          </div>
-        </Flex>
-      </Flex>
       <h1>Verb types</h1>
       <Table<{
         type: string;

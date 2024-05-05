@@ -1,5 +1,6 @@
 import { Flex } from "@src/common/flex/flex";
 import { PropsWithChildren } from "react";
+import "@src/common/input/checkbox/CheckBox.scss";
 
 export function CheckBox(
   props: PropsWithChildren<{
@@ -7,14 +8,20 @@ export function CheckBox(
     onChange?: (checked: boolean) => void;
   }>
 ) {
+  if (props.children === "Japanese") {
+    console.log("checked", props.checked, "" + props.children);
+  }
+
   return (
     <Flex
       right
       slim
-      justify="center"
+      center
+      className="checkbox-container"
+      gap={4}
       onClick={() => props.onChange?.(!props.checked)}
     >
-      <input readOnly checked={!!props.checked} type="checkbox" />
+      <div className="checkbox">{props.checked ? "X" : ""}</div>
       {props.children}
     </Flex>
   );
