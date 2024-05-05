@@ -8,10 +8,6 @@ export function CheckBox(
     onChange?: (checked: boolean) => void;
   }>
 ) {
-  if (props.children === "Japanese") {
-    console.log("checked", props.checked, "" + props.children);
-  }
-
   return (
     <Flex
       right
