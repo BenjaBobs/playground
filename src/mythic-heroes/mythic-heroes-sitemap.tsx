@@ -1,5 +1,5 @@
 import { MythicHeroes } from "@src/mythic-heroes/mythic-heroes";
-import { RouteDefinition } from "@src/sitemap";
+import { RouteDefinition } from "src/shared/navigation/sitemap";
 
 export const MythicHeroesSitemap = {
   menu: { name: "Mythic Heroes" },
