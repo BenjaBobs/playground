@@ -6,11 +6,8 @@ import { JapaneseSettings } from "@src/japanese/japanese-sitemap";
 import { KanaTable } from "@src/japanese/kana-table/KanaTable";
 import { VerbColors } from "@src/japanese/systems/verbs/VerbsOverview";
 import { KanaUtils } from "@src/japanese/utils/kana-utils";
-import { useSnapshot } from "valtio";
 
 export function VerbPresentForm() {
-  const settings = useSnapshot(JapaneseSettings);
-
   return (
     <ContentBox>
       <h1>Present form</h1>
@@ -42,10 +39,10 @@ export function VerbPresentForm() {
 
               return (
                 <Flex down center>
-                  {settings.japanese && (
+                  {JapaneseSettings.japanese && (
                     <Md text={KanaUtils.toHiragana(joined)} />
                   )}
-                  {settings.romaji && <Md text={joined} />}
+                  {JapaneseSettings.romaji && <Md text={joined} />}
                 </Flex>
               );
             },
@@ -54,10 +51,10 @@ export function VerbPresentForm() {
             name: "Transformation",
             render: (row) => (
               <Flex down center>
-                {settings.japanese && (
+                {JapaneseSettings.japanese && (
                   <Md text={KanaUtils.toHiragana(row.transformation)} />
                 )}
-                {settings.romaji && <Md text={row.transformation} />}
+                {JapaneseSettings.romaji && <Md text={row.transformation} />}
               </Flex>
             ),
           },
@@ -65,10 +62,10 @@ export function VerbPresentForm() {
             name: "Example",
             render: (row) => (
               <Flex down center>
-                {settings.japanese && (
+                {JapaneseSettings.japanese && (
                   <Md text={KanaUtils.toHiragana(row.example)} />
                 )}
-                {settings.romaji && <Md text={row.example} />}
+                {JapaneseSettings.romaji && <Md text={row.example} />}
               </Flex>
             ),
           },
@@ -76,10 +73,10 @@ export function VerbPresentForm() {
             name: "Keigo form",
             render: (row) => (
               <Flex down center>
-                {settings.japanese && (
+                {JapaneseSettings.japanese && (
                   <Md text={KanaUtils.toHiragana(row.keigoForm)} />
                 )}
-                {settings.romaji && <Md text={row.keigoForm} />}
+                {JapaneseSettings.romaji && <Md text={row.keigoForm} />}
               </Flex>
             ),
           },

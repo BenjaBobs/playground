@@ -1,5 +1,6 @@
 import { JapaneseSiteMap } from "@src/japanese/japanese-sitemap";
 import { MythicHeroesSitemap } from "@src/mythic-heroes/mythic-heroes-sitemap";
+import { Route } from "@src/shared/navigation/Route";
 import version from "@src/version.txt?raw";
 
 export const BaseRoute = "playground";
@@ -38,14 +39,19 @@ export const siteMap = {
   mythicHeroes: MythicHeroesSitemap,
 } satisfies RouteDefinition["nested"];
 
+const siteRoutes: RouteDefinition[] = [];
 enhance(siteMap);
 
 function enhance(routeMap: RouteBranch, parent?: RouteDefinition) {
   Object.entries(routeMap).forEach(([path, route]) => {
+    siteRoutes.push(route);
+
     route.parent = parent;
     route.relativePath = route.relativePath ?? path;
+
     if (!route.parent)
       route.relativePath = `${BaseRoute}/${route.relativePath}`;
+
     const parentPath = parent?.fullPath ?? "";
     route.fullPath = `${parentPath}/${route.relativePath}`;
 
@@ -53,4 +59,16 @@ function enhance(routeMap: RouteBranch, parent?: RouteDefinition) {
       enhance(route.nested, route);
     }
   });
+}
+
+export function SiteRouter() {
+  return (
+    <>
+      {Object.values(siteRoutes).map((route) => (
+        <Route key={route.relativePath} path={route.fullPath!}>
+          {route.element}
+        </Route>
+      ))}
+    </>
+  );
 }

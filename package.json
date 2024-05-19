@@ -11,13 +11,15 @@
     "preview": "vite build && vite preview"
   },
   "dependencies": {
+    "@react-beyond/hoc": "^1.1.2",
     "marked": "^12.0.2",
+    "mobx": "^6.12.3",
+    "mobx-react-lite": "^4.0.7",
     "pure-rand": "6.0.4",
     "react": "18.2.0",
+    "react-beyond": "^1.1.2",
     "react-dom": "18.2.0",
-    "react-highlight-words": "^0.20.0",
-    "react-router-dom": "6.21.2",
-    "valtio": "^1.13.2"
+    "react-highlight-words": "^0.20.0"
   },
   "devDependencies": {
     "@types/react": "18.2.47",

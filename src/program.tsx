@@ -1,14 +1,3 @@
-import {
-  BrowserRouter,
-  Navigate,
-  Outlet,
-  Route,
-  Routes,
-  redirect,
-  useLocation,
-  useMatch,
-} from "react-router-dom";
-import { NavMenu } from "@src/nav-menu";
 import React, { PropsWithChildren } from "react";
 import ReactDOM from "react-dom/client";
 
@@ -16,9 +5,14 @@ import.meta.glob("./utils/extensions/*.ts", {
   eager: true,
 });
 
-// eslint-disable-next-line no-restricted-imports
-import "./program.scss";
-import { RouteBranch, RouteDefinition, siteMap } from "@src/sitemap";
+import "@src/program.scss";
+import { Beyond } from "react-beyond";
+import { observer } from "mobx-react-lite";
+import { hoc } from "@react-beyond/hoc";
+import { Nav } from "@src/shared/navigation/Nav";
+
+import { NavMenu } from "@src/shared/navigation/nav-menu";
+import { SiteRouter } from "@src/shared/navigation/sitemap";
 
 const root =
   document.getElementById("root") ??
@@ -27,18 +21,18 @@ root.id = "root";
 
 ReactDOM.createRoot(root).render(
   <React.StrictMode>
-    <BrowserRouter>
+    <Beyond features={[hoc(observer)]}>
       <RouteToClass>
         <NavMenu />
-        <SiteRouter key="siteMap" branch={siteMap} />
+        <SiteRouter />
       </RouteToClass>
-    </BrowserRouter>
+    </Beyond>
   </React.StrictMode>
 );
 
 function RouteToClass(props: PropsWithChildren) {
-  const location = useLocation();
-  const pathParts = location.pathname
+  const pathParts = Nav.path
+    .trim("/")
     .split("/")
     .filter((p) => p)
     .slice(1);
@@ -53,40 +47,4 @@ function RouteToClass(props: PropsWithChildren) {
   }
 
   return <div className={classNames.join(" ")}>{props.children}</div>;
-}
-
-function SiteRouter(props: { branch: RouteBranch; parent?: RouteDefinition }) {
-  return (
-    <Routes>
-      {Object.values(props.branch).map((route) => (
-        <Route
-          key={route.relativePath}
-          path={route.relativePath}
-          element={<RenderRoute route={route} />}
-          loader={async () => {
-            if (!route.element && route.nested)
-              return redirect(Object.values(route.nested)[0].fullPath!);
-          }}
-        >
-          {route.nested && (
-            <Route path="*" element={<SiteRouter branch={route.nested} />} />
-          )}
-        </Route>
-      ))}
-      <Route key="404" path="*" element={<div>Nothing to see here.</div>} />
-    </Routes>
-  );
-}
-
-function RenderRoute(props: { route: RouteDefinition }) {
-  const isMatch = useMatch({ path: props.route.fullPath!, end: false });
-  const isFullMatch = useMatch({ path: props.route.fullPath!, end: true });
-
-  if (isMatch && !isFullMatch) return <Outlet />;
-
-  if (isFullMatch && !props.route.element && props.route.nested) {
-    return <Navigate to={Object.values(props.route.nested)[0].relativePath!} />;
-  }
-
-  return props.route.element ?? <Outlet />;
 }

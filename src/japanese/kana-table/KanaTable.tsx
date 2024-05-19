@@ -8,7 +8,6 @@ import {
 } from "@src/japanese/kana-table/KanaTable.data";
 import "@src/japanese/kana-table/KanaTable.scss";
 import React, { CSSProperties } from "react";
-import { useSnapshot } from "valtio";
 
 const vowels = ["a", "i", "u", "e", "o"] as const;
 
@@ -31,14 +30,12 @@ function positionToGridArea(
 }
 
 export function KanaTablePage() {
-  const snap = useSnapshot(JapaneseSettings);
-
   return (
     <ContentBox>
       <KanaTable
-        hiragana={snap.hiragana}
-        romaji={snap.romaji}
-        katakana={snap.katakana}
+        hiragana={JapaneseSettings.hiragana}
+        romaji={JapaneseSettings.romaji}
+        katakana={JapaneseSettings.katakana}
       />
     </ContentBox>
   );

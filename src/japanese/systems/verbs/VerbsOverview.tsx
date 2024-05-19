@@ -4,7 +4,6 @@ import { useDevice } from "@src/common/hooks/useDeviceSize";
 import { Table } from "@src/common/table/Table";
 import { Md } from "@src/common/txt/Md";
 import { JapaneseSettings } from "@src/japanese/japanese-sitemap";
-import { useSnapshot } from "valtio";
 
 export const VerbColors = {
   godan: "oklch(0.5 0.1 150)",
@@ -14,7 +13,6 @@ export const VerbColors = {
 
 export function VerbsOverview() {
   const device = useDevice();
-  const settings = useSnapshot(JapaneseSettings);
 
   return (
     <ContentBox>
@@ -111,20 +109,22 @@ export function VerbsOverview() {
             width: device === "mobile" ? 1 : undefined,
             render: (row) => (
               <Flex down center color={VerbColors.ichidan}>
-                {settings.casual && settings.japanese && (
+                {JapaneseSettings.casual && JapaneseSettings.japanese && (
                   <Md text={row.ichidanExample} />
                 )}
-                {settings.casual && settings.romaji && (
+                {JapaneseSettings.casual && JapaneseSettings.romaji && (
                   <Md text={row.ichidanExampleRomaji} />
                 )}
-                {settings.keigo && row.ichidanKeigoExample && (
+                {JapaneseSettings.keigo && row.ichidanKeigoExample && (
                   <Flex
                     down
                     center
                     style={{ fontStyle: "italic", opacity: 0.8 }}
                   >
-                    {settings.japanese && <Md text={row.ichidanKeigoExample} />}
-                    {settings.romaji && (
+                    {JapaneseSettings.japanese && (
+                      <Md text={row.ichidanKeigoExample} />
+                    )}
+                    {JapaneseSettings.romaji && (
                       <Md text={row.ichidanKeigoExampleRomaji} />
                     )}
                   </Flex>
@@ -141,20 +141,22 @@ export function VerbsOverview() {
             width: device === "mobile" ? 1 : undefined,
             render: (row) => (
               <Flex down color={VerbColors.godan}>
-                {settings.casual && settings.japanese && (
+                {JapaneseSettings.casual && JapaneseSettings.japanese && (
                   <Md text={row.godanExample} />
                 )}
-                {settings.casual && settings.romaji && (
+                {JapaneseSettings.casual && JapaneseSettings.romaji && (
                   <Md text={row.godanExampleRomaji} />
                 )}
-                {settings.keigo && row.godanKeigoExample && (
+                {JapaneseSettings.keigo && row.godanKeigoExample && (
                   <Flex
                     down
                     center
                     style={{ fontStyle: "italic", opacity: 0.8 }}
                   >
-                    {settings.japanese && <Md text={row.godanKeigoExample} />}
-                    {settings.romaji && (
+                    {JapaneseSettings.japanese && (
+                      <Md text={row.godanKeigoExample} />
+                    )}
+                    {JapaneseSettings.romaji && (
                       <Md text={row.godanKeigoExampleRomaji} />
                     )}
                   </Flex>
@@ -170,30 +172,30 @@ export function VerbsOverview() {
             render: (row) => (
               <Flex down color={VerbColors.irregular} gap={8}>
                 <Flex down center>
-                  {settings.casual && settings.japanese && (
+                  {JapaneseSettings.casual && JapaneseSettings.japanese && (
                     <Md text={row.irregularSuru} />
                   )}
-                  {settings.casual && settings.romaji && (
+                  {JapaneseSettings.casual && JapaneseSettings.romaji && (
                     <Md text={row.irregularSuruRomaji} />
                   )}
-                  {settings.keigo && settings.japanese && (
+                  {JapaneseSettings.keigo && JapaneseSettings.japanese && (
                     <Md text={row.irregularKeigoSuru} />
                   )}
-                  {settings.keigo && settings.romaji && (
+                  {JapaneseSettings.keigo && JapaneseSettings.romaji && (
                     <Md text={row.irregularKeigoSuruRomaji} />
                   )}
                 </Flex>
                 <Flex down center style={{ fontStyle: "italic", opacity: 0.8 }}>
-                  {settings.casual && settings.japanese && (
+                  {JapaneseSettings.casual && JapaneseSettings.japanese && (
                     <Md text={row.irregularKuru} />
                   )}
-                  {settings.casual && settings.romaji && (
+                  {JapaneseSettings.casual && JapaneseSettings.romaji && (
                     <Md text={row.irregularKuruRomaji} />
                   )}
-                  {settings.keigo && settings.japanese && (
+                  {JapaneseSettings.keigo && JapaneseSettings.japanese && (
                     <Md text={row.irregularKeigoKuru} />
                   )}
-                  {settings.keigo && settings.romaji && (
+                  {JapaneseSettings.keigo && JapaneseSettings.romaji && (
                     <Md text={row.irregularKeigoKuruRomaji} />
                   )}
                 </Flex>
