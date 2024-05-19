@@ -9,7 +9,7 @@ import {
 } from "react";
 
 import "@src/common/anim/Animator.scss";
-import { useEffectRefsPopulated } from "@src/common/hooks/useEffectRefsPopulated";
+import { useRefsPopulatedEffect } from "@src/common/hooks/useRefsPopulatedEffect";
 import { useCallback } from "react";
 
 type AnimationContext = {
@@ -121,7 +121,7 @@ export function Anim(
   const selfRef = useRef<HTMLDivElement>(null);
   const animationState = useContext(animContext);
 
-  useEffectRefsPopulated(() => {
+  useRefsPopulatedEffect(() => {
     const setups = props.setup(selfRef.current!);
 
     const anims = setups
@@ -168,7 +168,7 @@ export function Anim(
 
       anims.forEach((anim) => anim.cancel());
     };
-  }, [selfRef.current]);
+  }, [selfRef]);
 
   return (
     <div ref={selfRef} className="anim">
