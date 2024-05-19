@@ -9,6 +9,7 @@ import { Flex } from "@src/common/flex/flex";
 import { Dropdown } from "@src/common/windows/dropdown/Dropdown";
 import { CheckBox } from "@src/common/input/checkbox/CheckBox";
 import { makeAutoObservable, runInAction } from "mobx";
+import { AdjectivesOverview } from "@src/japanese/systems/adjectives/AdjectivesOverview";
 
 export const JapaneseSettings = makeAutoObservable({
   japanese: true,
@@ -41,6 +42,10 @@ export const JapaneseSiteMap = {
       menu: { name: "Systems" },
       element: <SystemsOverview />,
       nested: {
+        adjectives: {
+          menu: { name: "Adjectives" },
+          element: <AdjectivesOverview />,
+        },
         verbs: {
           menu: { name: "Verbs" },
           element: <VerbsOverview />,

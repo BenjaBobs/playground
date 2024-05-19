@@ -6,16 +6,28 @@ type ColumnDefinition<T> = {
   render?: (row: T, index: number, allRows: T[]) => React.ReactNode;
 };
 
+type CellStyleArgs<T> =
+  | {
+      isHeader: true;
+      column: ColumnDefinition<T>;
+      columnIdx: number;
+    }
+  | {
+      isHeader: false;
+      column: ColumnDefinition<T>;
+      columnIdx: number;
+      row: T;
+      rowIdx: number;
+    };
+
 export function Table<T>(props: {
   data: T[] | undefined;
   rowKey: (row: T) => string;
   columns: ColumnDefinition<T>[];
   style?: React.CSSProperties;
-  cellStyle?: (args: {
-    columnIdx: number;
-    row: T;
-    rowIdx: number;
-  }) => React.CSSProperties | undefined;
+  cellStyle?: (
+    args: CellStyleArgs<T>
+  ) => React.CSSProperties | boolean | undefined;
   className?: string;
 }) {
   const totalWidth = props.columns.reduce(
@@ -27,13 +39,20 @@ export function Table<T>(props: {
     <table style={props.style} className={`table ${props.className ?? ""}`}>
       <thead>
         <tr className="header">
-          {props.columns.map((c, idx) => (
+          {props.columns.map((column, columnIdx) => (
             <th
-              style={{ width: getWidth(c.width, totalWidth) }}
+              style={{
+                width: getWidth(column.width, totalWidth),
+                ...(props.cellStyle?.({
+                  column,
+                  columnIdx,
+                  isHeader: true,
+                }) as React.CSSProperties | false | undefined),
+              }}
               className="cell"
-              key={idx}
+              key={columnIdx}
             >
-              {c.name}
+              {column.name}
             </th>
           ))}
         </tr>
@@ -41,16 +60,22 @@ export function Table<T>(props: {
       <tbody className="body">
         {props.data?.map((row, rowIdx, all) => (
           <tr className="row" key={rowIdx}>
-            {props.columns.map((c, columnIdx) => (
+            {props.columns.map((column, columnIdx) => (
               <td
                 style={{
-                  width: getWidth(c.width, totalWidth),
-                  ...props.cellStyle?.({ columnIdx, row, rowIdx }),
+                  width: getWidth(column.width, totalWidth),
+                  ...(props.cellStyle?.({
+                    column,
+                    columnIdx,
+                    row,
+                    rowIdx,
+                    isHeader: false,
+                  }) as React.CSSProperties | false | undefined),
                 }}
                 className="cell"
                 key={props.rowKey(row) + columnIdx}
               >
-                {c.render?.(row, rowIdx, all)}
+                {column.render?.(row, rowIdx, all)}
               </td>
             ))}
           </tr>

@@ -78,9 +78,11 @@ export function VerbTeForm() {
             ),
           },
         ]}
-        cellStyle={({ rowIdx }) => {
+        cellStyle={(cell) => {
+          if (cell.isHeader) return undefined;
+
           // ichidan
-          if (rowIdx === 0) {
+          if (cell.rowIdx === 0) {
             return {
               borderBottom: "1px solid lightgray",
               color: VerbColors.ichidan,
@@ -88,9 +90,10 @@ export function VerbTeForm() {
           }
 
           // godan
-          if (rowIdx < 6) {
+          if (cell.rowIdx < 6) {
             return {
-              borderBottom: rowIdx === 5 ? "1px solid lightgray" : undefined,
+              borderBottom:
+                cell.rowIdx === 5 ? "1px solid lightgray" : undefined,
               color: VerbColors.godan,
             };
           }

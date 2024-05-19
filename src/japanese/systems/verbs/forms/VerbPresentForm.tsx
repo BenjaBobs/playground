@@ -29,7 +29,7 @@ export function VerbPresentForm() {
       <Table
         data={keigoConjugationTableData}
         rowKey={(row) => row.example}
-        cellStyle={({ row }) => ({ color: row.color })}
+        cellStyle={(cell) => !cell.isHeader && { color: cell.row.color }}
         columns={[
           { name: "Class", render: (row) => row.class },
           {

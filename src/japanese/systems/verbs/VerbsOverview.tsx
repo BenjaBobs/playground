@@ -29,8 +29,8 @@ export function VerbsOverview() {
           { name: "Description", render: (row) => row.description },
           { name: "Example", render: (row) => row.example },
         ]}
-        cellStyle={({ row }) => {
-          return { color: row.color };
+        cellStyle={(cell) => {
+          return !cell.isHeader && { color: cell.row.color };
         }}
         style={{ maxWidth: "600px" }}
         data={[
@@ -95,7 +95,7 @@ export function VerbsOverview() {
             width: device === "mobile" ? "20vw" : undefined,
             render: (row) => (
               <Flex down gap={8}>
-                <span>{row.name}</span>
+                <b>{row.name}</b>
                 <i>{row.description}</i>
               </Flex>
             ),
