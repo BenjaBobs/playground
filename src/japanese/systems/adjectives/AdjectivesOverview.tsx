@@ -35,7 +35,7 @@ export function AdjectivesOverview() {
             type: "い (i) adjective",
             color: AdjectiveColors.i,
             description: "い-adjectives always end in い (i).",
-            example: "たかい (takai) - pretty",
+            example: "たかい (takai) - high, tall",
           },
           {
             type: "な (na) adjective",
@@ -43,6 +43,76 @@ export function AdjectivesOverview() {
             description:
               "な-adjectives mostly end in other kana than い, but some exceptions exist.",
             example: "げんき (genki) - healthy",
+          },
+        ]}
+      />
+      <h1>Usage</h1>
+      <p>Adjectives are used to describe nouns.</p>
+      <Table
+        rowKey={(row) => row.type}
+        cellStyle={(cell) => !cell.isHeader && { color: cell.row.color }}
+        columns={[
+          {
+            name: "Type",
+            render: (row) => <Md text={row.type} />,
+          },
+          {
+            name: "Example",
+            render: (row) => (
+              <Flex down>
+                <Md text={row.example.romaji} />
+              </Flex>
+            ),
+          },
+        ]}
+        data={[
+          {
+            type: "**い** (i) adjective",
+            color: AdjectiveColors.i,
+            example: {
+              hiragana: "**たかい**",
+              romaji: "**takai**",
+            },
+          },
+          {
+            type: "**い** (i) adjective + noun",
+            color: AdjectiveColors.i,
+            example: {
+              hiragana: "**たかい** やま",
+              romaji: "**takai** yama",
+            },
+          },
+          {
+            type: "Noun + **い** (i) adjective",
+            color: AdjectiveColors.i,
+            example: {
+              hiragana: "やま が **たかい**",
+              romaji: "yama ga **takai**",
+            },
+          },
+          {
+            type: "**な** (na) adjective",
+            color: AdjectiveColors.na,
+            example: {
+              hiragana: "**げんき**",
+              romaji: "**genki**",
+            },
+          },
+          {
+            type: "**な** (na) adjective + noun",
+            color: AdjectiveColors.na,
+            example: {
+              hiragana: "**げんきな** ひと",
+              romaji: "**genki na** hito",
+            },
+          },
+          {
+            type: "Noun + **な** (na) adjective",
+            color: AdjectiveColors.na,
+            example: {
+              hiragana: "ひと が **げんきな**",
+              romaji: "hito ga **genki**",
+            },
           },
         ]}
       />
