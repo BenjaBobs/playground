@@ -18,13 +18,11 @@
     "pure-rand": "6.0.4",
     "react": "18.2.0",
     "react-beyond": "^1.1.2",
-    "react-dom": "18.2.0",
-    "react-highlight-words": "^0.20.0"
+    "react-dom": "18.2.0"
   },
   "devDependencies": {
     "@types/react": "18.2.47",
     "@types/react-dom": "18.2.18",
-    "@types/react-highlight-words": "^0.16.7",
     "@typescript-eslint/eslint-plugin": "6.18.1",
     "@typescript-eslint/parser": "6.18.1",
     "@vitejs/plugin-react-swc": "3.5.0",

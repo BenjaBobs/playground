@@ -6,7 +6,5 @@ export function Route(props: PropsWithChildren<{ path: string }>) {
   const expectedPath = props.path.trimEnd("/");
   const shouldRender = path.endsWith(expectedPath);
 
-  console.log("Route", { path, expectedPath, shouldRender });
-
   return shouldRender ? props.children : null;
 }

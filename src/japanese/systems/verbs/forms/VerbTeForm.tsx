@@ -3,10 +3,10 @@ import { ContentBox } from "@src/common/context-box/ContextBox";
 import { Flex } from "@src/common/flex/flex";
 import { Stack } from "@src/common/stack/Stack";
 import { Table } from "@src/common/table/Table";
+import { Md } from "@src/common/txt/Md";
+import { JapaneseSettings } from "@src/japanese/japanese-sitemap";
 import { KanaTable } from "@src/japanese/kana-table/KanaTable";
 import { VerbColors } from "@src/japanese/systems/verbs/VerbsOverview";
-import { KanaUtils } from "@src/japanese/utils/kana-utils";
-import Highlighter from "react-highlight-words";
 
 export function VerbTeForm() {
   return (
@@ -30,19 +30,19 @@ export function VerbTeForm() {
       />
       <h2>Conjugation table</h2>
       <Table
-        rowKey={(row) => row.example}
+        rowKey={(row) => row.exampleHiragana}
         data={teFormTableData}
         columns={[
           {
             name: "Class",
-            render: (row) => row.class,
+            render: (row) => <Md text={row.class} />,
           },
           {
             name: "Ending",
             render: (row) => (
               <Flex down>
-                <div>{row.endings.join("/")}</div>
-                <div>{KanaUtils.toRomaji(row.endings.join("/"))}</div>
+                {JapaneseSettings.hiragana && <Md text={row.endingsHiragana} />}
+                {JapaneseSettings.romaji && <Md text={row.endingsRomaji} />}
               </Flex>
             ),
           },
@@ -50,22 +50,8 @@ export function VerbTeForm() {
             name: "Example",
             render: (row) => (
               <Flex down>
-                <Highlighter
-                  highlightStyle={{
-                    filter: "brightness(1.5)",
-                  }}
-                  searchWords={row.endings}
-                  textToHighlight={row.example}
-                />
-                <Highlighter
-                  highlightStyle={{
-                    filter: "brightness(1.5)",
-                  }}
-                  searchWords={KanaUtils.toRomaji(row.endings.join("/")).split(
-                    "/"
-                  )}
-                  textToHighlight={KanaUtils.toRomaji(row.example)}
-                />
+                {JapaneseSettings.hiragana && <Md text={row.exampleHiragana} />}
+                {JapaneseSettings.romaji && <Md text={row.exampleRomaji} />}
               </Flex>
             ),
           },
@@ -73,8 +59,12 @@ export function VerbTeForm() {
             name: "→",
             render: (row) => (
               <Flex down>
-                <div>{row.transformation}</div>
-                <div>{KanaUtils.toRomaji(row.transformation)}</div>
+                {JapaneseSettings.hiragana && (
+                  <Md text={row.transformationHiragana} />
+                )}
+                {JapaneseSettings.romaji && (
+                  <Md text={row.transformationRomaji} />
+                )}
               </Flex>
             ),
           },
@@ -82,22 +72,8 @@ export function VerbTeForm() {
             name: "Te-form",
             render: (row) => (
               <Flex down>
-                <Highlighter
-                  highlightStyle={{
-                    filter: "brightness(1.5)",
-                  }}
-                  searchWords={[row.transformation.replace("-", "")]}
-                  textToHighlight={row.teForm}
-                />
-                <Highlighter
-                  highlightStyle={{
-                    filter: "brightness(1.5)",
-                  }}
-                  searchWords={[
-                    KanaUtils.toRomaji(row.transformation).replace("-", ""),
-                  ]}
-                  textToHighlight={KanaUtils.toRomaji(row.teForm)}
-                />
+                {JapaneseSettings.hiragana && <Md text={row.teFormHiragana} />}
+                {JapaneseSettings.romaji && <Md text={row.teFormRomaji} />}
               </Flex>
             ),
           },
@@ -395,65 +371,101 @@ function Kana(props: { kana: string; romaji: string; replacement?: boolean }) {
 
 const teFormTableData: {
   class: string;
-  endings: string[];
-  transformation: string;
-  example: string;
-  teForm: string;
+  endingsHiragana: string;
+  endingsRomaji: string;
+  transformationHiragana: string;
+  transformationRomaji: string;
+  exampleHiragana: string;
+  exampleRomaji: string;
+  teFormHiragana: string;
+  teFormRomaji: string;
 }[] = [
   {
-    class: "Ichidan (一段)",
-    endings: ["る"],
-    transformation: "-て",
-    example: "たべる",
-    teForm: "たべて",
+    class: "Ichidan (一段)<br/>-ru verbs",
+    endingsHiragana: "る",
+    endingsRomaji: "ru",
+    transformationHiragana: "-て",
+    transformationRomaji: "-te",
+    exampleHiragana: "たべ**る**",
+    exampleRomaji: "tabe**ru**",
+    teFormHiragana: "たべ**て**",
+    teFormRomaji: "tabe**te**",
   },
   {
-    class: "Godan (五段)",
-    endings: ["す"],
-    transformation: "-して",
-    example: "はなす",
-    teForm: "はなして",
-  },
-  {
-    class: "",
-    endings: ["つ", "る", "う"],
-    transformation: "-って",
-    example: "まつ",
-    teForm: "まって",
-  },
-  {
-    class: "",
-    endings: ["く"],
-    transformation: "-いて",
-    example: "かく",
-    teForm: "かいて",
+    class: "Godan (五段)<br/>-u verbs",
+    endingsHiragana: "す",
+    endingsRomaji: "su",
+    transformationHiragana: "-して",
+    transformationRomaji: "-shite",
+    exampleHiragana: "はな**す**",
+    exampleRomaji: "hana**su**",
+    teFormHiragana: "はな**して**",
+    teFormRomaji: "hana**shite**",
   },
   {
     class: "",
-    endings: ["ぐ"],
-    transformation: "-いで",
-    example: "およぐ",
-    teForm: "およいで",
+    endingsHiragana: "つ・る・う",
+    endingsRomaji: "tsu・ru・u",
+    transformationHiragana: "-って",
+    transformationRomaji: "-tte",
+    exampleHiragana: "ま**つ**",
+    exampleRomaji: "ma**tsu**",
+    teFormHiragana: "ま**って**",
+    teFormRomaji: "ma**tte**",
   },
   {
     class: "",
-    endings: ["ぬ", "ぶ", "む"],
-    transformation: "-んで",
-    example: "のむ",
-    teForm: "のんで",
+    endingsHiragana: "く",
+    endingsRomaji: "ku",
+    transformationHiragana: "-いて",
+    transformationRomaji: "-ite",
+    exampleHiragana: "か**く**",
+    exampleRomaji: "ka**ku**",
+    teFormHiragana: "か**いて**",
+    teFormRomaji: "ka**ite**",
+  },
+  {
+    class: "",
+    endingsHiragana: "ぐ",
+    endingsRomaji: "gu",
+    transformationHiragana: "-いで",
+    transformationRomaji: "-ide",
+    exampleHiragana: "およ**ぐ**",
+    exampleRomaji: "oyo**gu**",
+    teFormHiragana: "およ**いで**",
+    teFormRomaji: "oyo**ide**",
+  },
+  {
+    class: "",
+    endingsHiragana: "ぬ・ぶ・む",
+    endingsRomaji: "nu・bu・mu",
+    transformationHiragana: "-んで",
+    transformationRomaji: "-nde",
+    exampleHiragana: "の**む**",
+    exampleRomaji: "no**mu**",
+    teFormHiragana: "の**んで**",
+    teFormRomaji: "no**nde**",
   },
   {
     class: "Irregular",
-    endings: [],
-    transformation: "して",
-    example: "する",
-    teForm: "して",
+    endingsHiragana: "",
+    endingsRomaji: "",
+    transformationHiragana: "して",
+    transformationRomaji: "shite",
+    exampleHiragana: "する",
+    exampleRomaji: "suru",
+    teFormHiragana: "**して**",
+    teFormRomaji: "**shite**",
   },
   {
     class: "",
-    endings: [],
-    transformation: "きて",
-    example: "くる",
-    teForm: "きて",
+    endingsHiragana: "",
+    endingsRomaji: "",
+    transformationHiragana: "きて",
+    transformationRomaji: "kite",
+    exampleHiragana: "くる",
+    exampleRomaji: "kuru",
+    teFormHiragana: "きて",
+    teFormRomaji: "kite",
   },
 ];
