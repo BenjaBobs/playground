@@ -13,3 +13,43 @@
     background-color: rgba(0, 0, 0, 0.1);
   }
 }
+
+.nav-menu-option {
+  opacity: 0.8;
+
+  &:hover {
+    opacity: 1;
+  }
+}
+
+.nav-menu-breadcrumb {
+  width: fit-content;
+  overflow: hidden;
+  text-wrap: nowrap;
+
+  .nav-menu-branch-taken {
+    font-weight: bold;
+    padding: 0 4px;
+  }
+
+  .nav-menu-branch-not-taken {
+    pointer-events: none;
+    touch-action: none;
+    max-width: 0px;
+    opacity: 0;
+    visibility: hidden;
+    transition: padding 0.1s 0.1s ease-in-out, max-width 0.1s 0.1s ease-in-out,
+      opacity 0.1s 0.1s ease-in-out, visibility 0.1s 0.1s linear;
+  }
+
+  &:hover {
+    .nav-menu-branch-not-taken {
+      padding: 0 4px;
+      pointer-events: auto;
+      touch-action: auto;
+      max-width: 300px;
+      opacity: 1;
+      visibility: visible;
+    }
+  }
+}

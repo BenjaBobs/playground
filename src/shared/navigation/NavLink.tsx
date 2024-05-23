@@ -9,7 +9,7 @@ export function NavLink(
     to: string;
   }>
 ) {
-  const isMatch = Nav.isMatchPartial(props.to);
+  const isMatch = Nav.isStartOfCurrentPath(props.to);
 
   return (
     <Link

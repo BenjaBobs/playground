@@ -10,6 +10,7 @@ export function Link(
 ) {
   return (
     <a
+      className={props.className}
       style={props.style}
       href={props.to}
       onClick={(evt) => {

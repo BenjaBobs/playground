@@ -1,7 +1,7 @@
 import { makeAutoObservable } from "mobx";
 
 class NavImpl {
-  private current = window.location.pathname;
+  private current = window.location.pathname.trim("/");
 
   constructor() {
     makeAutoObservable(this);
@@ -9,7 +9,7 @@ class NavImpl {
     history.pushState = new Proxy(history.pushState, {
       apply: (target, thisArg, argArray) => {
         const result = target.apply(thisArg, argArray as any);
-        this.current = window.location.pathname;
+        this.current = window.location.pathname.trim("/");
         return result;
       },
     });
@@ -17,7 +17,7 @@ class NavImpl {
     history.replaceState = new Proxy(history.replaceState, {
       apply: (target, thisArg, argArray) => {
         const result = target.apply(thisArg, argArray as any);
-        this.current = window.location.pathname;
+        this.current = window.location.pathname.trim("/");
         return result;
       },
     });
@@ -31,12 +31,16 @@ class NavImpl {
     history.pushState(null, "", value);
   }
 
-  public isMatchFull(path: string) {
-    return this.current.trim("/") === path.trim("/");
+  public isCurrentPath(path: string | undefined) {
+    return !!path && this.current === path.trim("/");
   }
 
-  public isMatchPartial(path: string) {
-    return this.current.trim("/").startsWith(path.trim("/"));
+  public isStartOfCurrentPath(path: string | undefined) {
+    return !!path && this.current.startsWith(path.trim("/"));
+  }
+
+  public isCurrentPathStartOf(path: string | undefined) {
+    return !!path && path.trim("/").startsWith(this.current);
   }
 }
 
