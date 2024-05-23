@@ -21,6 +21,34 @@ class NavImpl {
         return result;
       },
     });
+
+    history.back = new Proxy(history.back, {
+      apply: (target, thisArg, argArray) => {
+        const result = target.apply(thisArg, argArray as any);
+        this.current = window.location.pathname.trim("/");
+        return result;
+      },
+    });
+
+    history.forward = new Proxy(history.forward, {
+      apply: (target, thisArg, argArray) => {
+        const result = target.apply(thisArg, argArray as any);
+        this.current = window.location.pathname.trim("/");
+        return result;
+      },
+    });
+
+    history.go = new Proxy(history.go, {
+      apply: (target, thisArg, argArray) => {
+        const result = target.apply(thisArg, argArray as any);
+        this.current = window.location.pathname.trim("/");
+        return result;
+      },
+    });
+
+    window.addEventListener("popstate", () => {
+      this.current = window.location.pathname.trim("/");
+    });
   }
 
   public get path() {
