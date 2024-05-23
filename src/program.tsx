@@ -1,9 +1,8 @@
 import React, { PropsWithChildren } from "react";
 import ReactDOM from "react-dom/client";
 
-import.meta.glob("./utils/extensions/*.ts", {
-  eager: true,
-});
+import "@src/utils/extensions/Array";
+import "@src/utils/extensions/String";
 
 import "@src/program.scss";
 import { Beyond } from "react-beyond";
