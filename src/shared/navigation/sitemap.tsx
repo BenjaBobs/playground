@@ -1,5 +1,6 @@
 import { JapaneseSiteMap } from "@src/japanese/japanese-sitemap";
 import { MythicHeroesSitemap } from "@src/mythic-heroes/mythic-heroes-sitemap";
+import { Redirect } from "@src/shared/navigation/Redirect";
 import { Route } from "@src/shared/navigation/Route";
 import version from "@src/version.txt?raw";
 
@@ -64,11 +65,24 @@ function enhance(routeMap: RouteBranch, parent?: RouteDefinition) {
 export function SiteRouter() {
   return (
     <>
-      {Object.values(siteRoutes).map((route) => (
-        <Route key={route.relativePath} path={route.fullPath!}>
-          {route.element}
-        </Route>
-      ))}
+      {Object.values(siteRoutes).map((route) => {
+        if (!route.element) {
+          const firstChild = Object.values(route.nested ?? {})[0];
+          if (firstChild) {
+            return (
+              <Route key={route.relativePath} path={route.fullPath!}>
+                <Redirect to={firstChild.fullPath!} />
+              </Route>
+            );
+          }
+        }
+
+        return (
+          <Route key={route.relativePath} path={route.fullPath!}>
+            {route.element}
+          </Route>
+        );
+      })}
     </>
   );
 }

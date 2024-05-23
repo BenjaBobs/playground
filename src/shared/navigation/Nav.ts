@@ -31,6 +31,14 @@ class NavImpl {
     history.pushState(null, "", value);
   }
 
+  public replacePath(value: string) {
+    if (this.current !== value.trim("/")) {
+      setTimeout(() => {
+        history.replaceState(null, "", value);
+      }, 0);
+    }
+  }
+
   public isCurrentPath(path: string | undefined) {
     return !!path && this.current === path.trim("/");
   }
