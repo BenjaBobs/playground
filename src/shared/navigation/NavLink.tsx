@@ -7,6 +7,7 @@ export function NavLink(
     style?: (isMatch: boolean) => CSSProperties | undefined;
     className?: (isMatch: boolean) => string | undefined;
     to: string;
+    preventMobileInstaClick?: (isMatch: boolean) => boolean;
   }>
 ) {
   const isMatch = Nav.isStartOfCurrentPath(props.to);
@@ -16,6 +17,7 @@ export function NavLink(
       style={props.style?.(isMatch)}
       className={props.className?.(isMatch)}
       to={props.to}
+      preventMobileInstaClick={props.preventMobileInstaClick?.(isMatch)}
     >
       {props.children}
     </Link>

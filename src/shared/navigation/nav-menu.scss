@@ -1,5 +1,5 @@
 $duration: 0.2s;
-$delay: 0s;
+$delay: 0.1s;
 $height: 1rem;
 
 .nav-menu {
@@ -36,17 +36,18 @@ $height: 1rem;
 
   .nav-menu-branch-taken {
     font-weight: bold;
-    transition: padding-bototm $duration $delay ease-in-out;
+    transition: padding-bottom $duration $delay ease-in-out;
   }
 
   .nav-menu-branch-not-taken {
     min-height: 0;
     height: 0rem;
     max-width: 0rem;
+
     transition: height $duration $delay ease-in-out,
       transform $duration $delay ease-in-out,
       max-width $duration $delay ease-in-out,
-      padding-bototm $duration $delay ease-in-out;
+      padding-bottom $duration $delay ease-in-out;
     transform: scaleY(0);
 
     &:hover {

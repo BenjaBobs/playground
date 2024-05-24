@@ -76,6 +76,7 @@ function BreadCrumb(props: { routes: RouteDefinition[] }) {
           }
           key={route.fullPath}
           to={route.fullPath!}
+          preventMobileInstaClick={(isMatch) => isMatch}
         >
           {route.menu?.name}
         </NavLink>
