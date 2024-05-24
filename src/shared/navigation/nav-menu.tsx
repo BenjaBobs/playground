@@ -11,12 +11,12 @@ import { Link } from "@src/shared/navigation/Link";
 
 export function NavMenu() {
   return (
-    <>
+    <div className="nav-menu">
       <Flex right gap={4} pad={4}>
         <BreadCrumb routes={Object.values(siteMap ?? {})} />
         <CurrentAndNextOptions branch={siteMap} />
       </Flex>
-    </>
+    </div>
   );
 }
 
@@ -68,7 +68,7 @@ function CurrentAndNextOptions(props: { branch: RouteBranch }) {
 
 function BreadCrumb(props: { routes: RouteDefinition[] }) {
   return (
-    <Flex right className="nav-menu-breadcrumb">
+    <Flex down className="nav-menu-breadcrumb">
       {props.routes.map((route) => (
         <NavLink
           className={(isMatch) =>

@@ -23,7 +23,7 @@ export const JapaneseSettings = makeAutoObservable({
 export const JapaneseSiteMap = {
   menu: {
     name: (
-      <Flex gap={8} justify="space-around">
+      <Flex gap={8} justify="between">
         <span>Japanese</span>
       </Flex>
     ),
