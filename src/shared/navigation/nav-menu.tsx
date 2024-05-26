@@ -68,7 +68,11 @@ function CurrentAndNextOptions(props: { branch: RouteBranch }) {
 
 function BreadCrumb(props: { routes: RouteDefinition[] }) {
   return (
-    <Flex down className="nav-menu-breadcrumb">
+    <Flex
+      down
+      className="nav-menu-breadcrumb"
+      style={{ "--route-count": `'${props.routes.length}'` } as any}
+    >
       {props.routes.map((route) => (
         <NavLink
           className={(isMatch) =>

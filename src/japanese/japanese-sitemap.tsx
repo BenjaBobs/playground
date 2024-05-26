@@ -22,11 +22,7 @@ export const JapaneseSettings = makeAutoObservable({
 
 export const JapaneseSiteMap = {
   menu: {
-    name: (
-      <Flex gap={8} justify="between">
-        <span>Japanese</span>
-      </Flex>
-    ),
+    name: "Japanese",
     extra: (
       <Dropdown trigger="click" content={<JapaneseSettingsCard />}>
         <span className="clickable">&#128736;</span>

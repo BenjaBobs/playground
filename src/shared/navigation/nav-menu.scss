@@ -39,6 +39,17 @@ $height: 1rem;
     transition: padding-bottom $duration $delay ease-in-out;
   }
 
+  &:not(:hover) {
+    .nav-menu-branch-taken::after {
+      content: var(--route-count);
+      font-size: 0.5em;
+      line-height: 1em;
+      vertical-align: super;
+      color: blue;
+      margin-right: -0.5em;
+    }
+  }
+
   .nav-menu-branch-not-taken {
     min-height: 0;
     height: 0rem;
