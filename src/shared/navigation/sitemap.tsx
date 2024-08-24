@@ -1,3 +1,4 @@
+import { CrochetingSiteMap } from "@src/crocheting/crocheting-sitemap";
 import { JapaneseSiteMap } from "@src/japanese/japanese-sitemap";
 import { MythicHeroesSitemap } from "@src/mythic-heroes/mythic-heroes-sitemap";
 import { Redirect } from "@src/shared/navigation/Redirect";
@@ -38,6 +39,7 @@ export const siteMap = {
   },
   japanese: JapaneseSiteMap,
   mythicHeroes: MythicHeroesSitemap,
+  crocheting: CrochetingSiteMap,
 } satisfies RouteDefinition["nested"];
 
 const siteRoutes: RouteDefinition[] = [];
