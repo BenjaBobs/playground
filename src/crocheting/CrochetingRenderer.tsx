@@ -30,12 +30,6 @@ export function CrochetingRenderer(props: { data?: CrochetingData }) {
         (event.clientY - viewData.offsetY - rect.y) / viewData.zoom
       );
 
-      console.log({
-        offsetX: viewData.offsetX,
-        clientX: event.clientX,
-        cellX,
-      });
-
       return { x: cellX, y: cellY };
     }
 
@@ -48,7 +42,6 @@ export function CrochetingRenderer(props: { data?: CrochetingData }) {
       }
 
       viewData.hoveredCell = getCellFromEvent(event);
-      console.log(getCellFromEvent(event));
 
       rerender();
     };
@@ -60,19 +53,15 @@ export function CrochetingRenderer(props: { data?: CrochetingData }) {
         viewData.hoveredCell = getCellFromEvent(event);
       }
 
+      console.log(viewData.hoveredCell);
+
       rerender();
     };
 
     const handleClick = (event: MouseEvent) => {
       const clickedCell = getCellFromEvent(event);
 
-      patternData.toggleCell({
-        x: clickedCell.x,
-        y: clickedCell.y,
-        color: "red",
-        count: 1,
-        content: "X",
-      });
+      patternData.toggleCell(clickedCell.x, clickedCell.y);
       rerender();
     };
 
@@ -89,49 +78,79 @@ export function CrochetingRenderer(props: { data?: CrochetingData }) {
     };
   }, [svgRef]);
 
+  function fitToView() {
+    const rect = patternData.getBoundingRectangle();
+    const svg = svgRef.current!;
+
+    rect.minX -= 1;
+    rect.minY -= 1;
+    rect.maxX += 1;
+    rect.maxY += 1;
+
+    viewData.zoom = Math.min(
+      svg.clientWidth / (rect.maxX - rect.minX),
+      svg.clientHeight / (rect.maxY - rect.minY)
+    );
+
+    viewData.offsetX = rect.minX * viewData.zoom;
+    viewData.offsetY = rect.minY * viewData.zoom;
+
+    rerender();
+  }
+
   return (
-    <svg
-      ref={svgRef}
+    <div
       style={{
         width: "100%",
         height: "100%",
-        backgroundSize: `${viewData.zoom}px ${viewData.zoom}px`,
-        backgroundPositionX: `${viewData.offsetX}px`,
-        backgroundPositionY: `${viewData.offsetY}px`,
-        backgroundImage: `linear-gradient(to right, grey 1px, transparent 1px),linear-gradient(to bottom, grey 1px, transparent 1px)`,
       }}
     >
-      {patternData.getCells().map((cell) => (
-        <g key={"" + cell.x + cell.y}>
+      <div style={{ position: "absolute", right: 10, top: 40 }}>
+        <button onClick={fitToView}>fit to view</button>
+      </div>
+      <svg
+        ref={svgRef}
+        style={{
+          width: "100%",
+          height: "100%",
+          backgroundSize: `${viewData.zoom}px ${viewData.zoom}px`,
+          backgroundPositionX: `${viewData.offsetX}px`,
+          backgroundPositionY: `${viewData.offsetY}px`,
+          backgroundImage: `linear-gradient(to right, grey 1px, transparent 1px),linear-gradient(to bottom, grey 1px, transparent 1px)`,
+        }}
+      >
+        {patternData.getCells().map((cell) => (
+          <g key={"" + cell.x + cell.y}>
+            <rect
+              x={cell.x * viewData.zoom + viewData.offsetX}
+              y={cell.y * viewData.zoom + viewData.offsetY}
+              width={viewData.zoom}
+              height={viewData.zoom}
+              fill={cell.color}
+            ></rect>
+            <text
+              x={cell.x * viewData.zoom + viewData.offsetX + viewData.zoom / 2}
+              y={cell.y * viewData.zoom + viewData.offsetY + viewData.zoom / 2}
+              width={viewData.zoom}
+              height={viewData.zoom}
+              fontSize={viewData.zoom}
+              textAnchor="middle"
+              alignmentBaseline="middle"
+            >
+              {cell.content}
+            </text>
+          </g>
+        ))}
+        {viewData.hoveredCell && (
           <rect
-            x={cell.x * viewData.zoom + viewData.offsetX}
-            y={cell.y * viewData.zoom + viewData.offsetY}
+            style={{ opacity: 0.1 }}
+            x={viewData.hoveredCell.x * viewData.zoom + viewData.offsetX}
+            y={viewData.hoveredCell.y * viewData.zoom + viewData.offsetY}
             width={viewData.zoom}
             height={viewData.zoom}
-            fill={cell.color}
           ></rect>
-          <text
-            x={cell.x * viewData.zoom + viewData.offsetX + viewData.zoom / 2}
-            y={cell.y * viewData.zoom + viewData.offsetY + viewData.zoom / 2}
-            width={viewData.zoom}
-            height={viewData.zoom}
-            fontSize={viewData.zoom}
-            text-anchor="middle"
-            alignment-baseline="middle"
-          >
-            {cell.content}
-          </text>
-        </g>
-      ))}
-      {viewData.hoveredCell && (
-        <rect
-          style={{ opacity: 0.1 }}
-          x={viewData.hoveredCell.x * viewData.zoom + viewData.offsetX}
-          y={viewData.hoveredCell.y * viewData.zoom + viewData.offsetY}
-          width={viewData.zoom}
-          height={viewData.zoom}
-        ></rect>
-      )}
-    </svg>
+        )}
+      </svg>
+    </div>
   );
 }
