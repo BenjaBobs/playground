@@ -38,6 +38,7 @@ const game = makeAutoObservable({
 			this.enabledKanas = Object.values(kanaTables)
 				.flatMap((it) => Object.values(it))
 				.flatMap((it) => it);
+		this.allTypedKanas = [];
 		this.kanasPrev = [];
 		this.kanas = this.generateKanas(0);
 		this.kanasNext = this.generateKanas(this.kanas.last()!.idx + 1);
