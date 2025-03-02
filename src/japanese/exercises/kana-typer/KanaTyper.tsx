@@ -95,6 +95,10 @@ const game = makeAutoObservable({
 			clearInterval(this.timer.handle);
 			this.timer = undefined;
 			this.finished = true;
+			setTimeout(
+				() => document.getElementById("kana-typer-reset-button")?.focus(),
+				1,
+			);
 		}
 	},
 
@@ -186,6 +190,7 @@ export function KanaTyper() {
 			<br />
 			<input
 				autoFocus
+				id="kana-typer-input"
 				disabled={game.finished}
 				value={game.currentInput}
 				onKeyDown={(evt) => {
@@ -196,7 +201,15 @@ export function KanaTyper() {
 			{game.finished && (
 				<>
 					<br />
-					<button onClick={() => game.reset()}>Reset</button>
+					<button
+						id="kana-typer-reset-button"
+						onClick={() => {
+							game.reset();
+							document.getElementById("kana-typer-input")?.focus();
+						}}
+					>
+						Reset
+					</button>
 					<br />
 					<div>
 						Correct:{" "}

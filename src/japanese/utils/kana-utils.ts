@@ -105,11 +105,11 @@ function initDiacriticMaps() {
 	}
 
 	const handakutenChars = [
-		["ぱ ", "は"],
-		["ぴ ", "ひ"],
-		["ぷ ", "ふ"],
-		["ぺ ", "へ"],
-		["ぽ ", "ほ"],
+		["ぱ", "は"],
+		["ぴ", "ひ"],
+		["ぷ", "ふ"],
+		["ぺ", "へ"],
+		["ぽ", "ほ"],
 	];
 	for (const [hiraganaDakuten, hiraganaNormal] of handakutenChars) {
 		const katakanaDakuten = KanaUtils.toKatakana(hiraganaDakuten);
