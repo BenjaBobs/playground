@@ -18,13 +18,12 @@ select {
 
 body {
   margin: 0;
+  font-family: "Noto Sans JP", sans-serif;
 
   // make default font size for phones more bearable
   @media (orientation: portrait) {
     font-size: 1.5vh;
   }
-
-  font-family: "Noto Sans JP", sans-serif;
 }
 
 mark {
@@ -46,3 +45,4 @@ p {
     filter: brightness(2);
   }
 }
+

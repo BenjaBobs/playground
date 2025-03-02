@@ -1,0 +1,23 @@
+.\/japanese {
+  .correct {
+    background:  oklch(0.9 0.05 141)
+  }
+
+  .incorrect {
+    background: oklch(0.9 0.05 18);
+  }
+
+  .current {
+    background: oklch(0.9 0.05 244);
+  }
+
+  .prev,.next {
+    opacity: 0.5;
+    font-size: 2em;
+  }
+
+  .prev,.cur,.next {
+    font-size: 3em;
+  }
+}
+

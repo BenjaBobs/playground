@@ -10,6 +10,7 @@ import { Dropdown } from "@src/common/windows/dropdown/Dropdown";
 import { CheckBox } from "@src/common/input/checkbox/CheckBox";
 import { makeAutoObservable, runInAction } from "mobx";
 import { AdjectivesOverview } from "@src/japanese/systems/adjectives/AdjectivesOverview";
+import { KanaTyper } from "./exercises/kana-typer/KanaTyper";
 
 export const JapaneseSettings = makeAutoObservable({
   japanese: true,
@@ -58,6 +59,15 @@ export const JapaneseSiteMap = {
         },
       },
     },
+    exercises: {
+      menu: { name: "Exercises" },
+      nested: {
+        kanaTyper: {
+          menu: { name: "Kana Typer" },
+          element: <KanaTyper />
+        }
+      }
+    }
   },
 } satisfies RouteDefinition;
 
