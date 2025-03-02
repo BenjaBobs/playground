@@ -25,7 +25,7 @@ const game = makeAutoObservable({
 	timer: undefined as
 		| undefined
 		| { handle: number; startedAtMs: number; timeLeftMs: number },
-	timeLimitMs: 0,
+	timeLimitMs: 30_000,
 	finished: false,
 	enabledKanas: [] as string[],
 	dakuten: true,
@@ -44,7 +44,6 @@ const game = makeAutoObservable({
 		this.kanasNext = this.generateKanas(this.kanas.last()!.idx + 1);
 		clearInterval(this.timer?.handle);
 		this.timer = undefined;
-		this.timeLimitMs = 30_000;
 		this.finished = false;
 	},
 
@@ -69,7 +68,7 @@ const game = makeAutoObservable({
 	},
 
 	onInput(evt: SyntheticEvent<HTMLInputElement>): void {
-		if (!this.timer && !this.finished) {
+		if (!this.timer && !this.finished && this.timeLimitMs) {
 			this.timer = {
 				handle: setInterval(() => {
 					this.tick();
@@ -240,11 +239,24 @@ function KanaTyperSettings() {
 			down
 			bg="white"
 			pad={8}
+			gap={8}
 			border="1px solid black"
 			style={{ minWidth: 350 }}
 		>
 			<h3>Selected Kana</h3>
-			<Flex>
+			<Flex itemsPlacement="center">
+				Time in seconds{" "}
+				<input
+					value={game.timeLimitMs / 1000}
+					onChange={(evt) => {
+						const parsed = Number.parseFloat(evt.target.value);
+						if (parsed != null && !Number.isNaN(parsed)) {
+							game.timeLimitMs = parsed * 1000;
+						}
+					}}
+				/>
+			</Flex>
+			<Flex gap={8}>
 				<CheckBox
 					checked={game.dakuten}
 					onChange={(val) => {
