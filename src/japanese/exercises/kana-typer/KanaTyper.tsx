@@ -2,6 +2,9 @@ import { ContentBox } from "@src/common/context-box/ContextBox";
 import { KanaUtils } from "@src/japanese/utils/kana-utils";
 import { makeAutoObservable } from "mobx";
 import { SyntheticEvent, useEffect } from "react";
+import { Dropdown } from "@src/common/windows/dropdown/Dropdown";
+import { CheckBox } from "@src/common/input/checkbox/CheckBox";
+import { Flex } from "@src/common/flex/flex";
 import "./KanaTyper.scss";
 
 type TypedKana = {
@@ -24,10 +27,15 @@ const game = makeAutoObservable({
 		| { handle: number; startedAtMs: number; timeLeftMs: number },
 	timeLimitMs: 0,
 	finished: false,
+	enabledKanas: [] as string[],
 
 	reset(): void {
 		this.currentInput = "";
 		this.currentIdx = 0;
+		if (!this.enabledKanas.length)
+			this.enabledKanas = Object.values(kanaTables)
+				.flatMap((it) => Object.values(it))
+				.flatMap((it) => it);
 		this.kanasPrev = [];
 		this.kanas = this.generateKanas(0);
 		this.kanasNext = this.generateKanas(this.kanas.last()!.idx + 1);
@@ -66,8 +74,6 @@ const game = makeAutoObservable({
 				startedAtMs: Date.now(),
 				timeLeftMs: this.timeLimitMs,
 			};
-
-			console.log("started timer", this.timer);
 		}
 
 		const inputElem = evt.target as HTMLInputElement;
@@ -92,9 +98,12 @@ const game = makeAutoObservable({
 	generateKanas(startingIdx: number): TypedKana[] {
 		const result: TypedKana[] = [];
 
+		if (!this.enabledKanas.length) return result;
+
 		for (let i = 0; i < 10; i++) {
-			const table = hiraganas;
-			const selectedKana = table[Math.floor(Math.random() * table.length)];
+			const selectedKana =
+				this.enabledKanas[Math.floor(Math.random() * this.enabledKanas.length)];
+
 			result.push({
 				idx: startingIdx + i,
 				kana: selectedKana,
@@ -113,7 +122,12 @@ export function KanaTyper() {
 
 	return (
 		<ContentBox>
-			<h1>Kana typer</h1>
+			<Flex itemsPlacement="center" gap={12}>
+				<h1>Kana typer</h1>
+				<Dropdown trigger="click" content={<KanaTyperSettings />}>
+					<span className="clickable">&#128736;</span>
+				</Dropdown>
+			</Flex>
 			<div>
 				{!game.timer
 					? "Type to start"
@@ -122,10 +136,16 @@ export function KanaTyper() {
 			<br />
 			<div className="kanas-to-type">
 				{[game.kanasPrev, game.kanas, game.kanasNext].map((row, idx) => (
-					<div key={idx} className={{ 0: "prev", 1: "cur", 2: "next" }[idx]}>
-						<span style={{ opacity: 0 }}>|</span>
+					<Flex
+						key={idx}
+						className={{ 0: "prev", 1: "cur", 2: "next" }[idx]}
+						justify="space-between"
+					>
+						<span style={{ opacity: 0, width: 0, height: "2em" }}>|</span>
 						{row.map((it) => (
-							<span
+							<Flex
+								down
+								itemsPlacement="center"
 								key={it.idx}
 								className={
 									{ true: "correct", false: "incorrect", undefined: "" }[
@@ -133,10 +153,18 @@ export function KanaTyper() {
 									] + (it.idx === game.currentIdx ? " current" : "")
 								}
 							>
-								{it.kana}
-							</span>
+								<span>{it.kana}</span>
+								<span
+									style={{
+										fontSize: "0.3em",
+										opacity: it.correct != null ? 1 : 0,
+									}}
+								>
+									{it.expected}
+								</span>
+							</Flex>
 						))}
-					</div>
+					</Flex>
 				))}
 			</div>
 			<br />
@@ -177,76 +205,88 @@ export function KanaTyper() {
 	);
 }
 
-const hiraganas = [
-	"あ",
-	"い",
-	"う",
-	"え",
-	"お",
-	"か",
-	"き",
-	"く",
-	"け",
-	"こ",
-	"さ",
-	"し",
-	"す",
-	"せ",
-	"そ",
-	"た",
-	"ち",
-	"つ",
-	"て",
-	"と",
-	"な",
-	"に",
-	"ぬ",
-	"ね",
-	"の",
-	"は",
-	"ひ",
-	"ふ",
-	"へ",
-	"ほ",
-	"ま",
-	"み",
-	"む",
-	"め",
-	"も",
-	"や",
-	"ゆ",
-	"よ",
-	"ら",
-	"り",
-	"る",
-	"れ",
-	"ろ",
-	"わ",
-	"を",
-	"ん",
-	"が",
-	"ぎ",
-	"ぐ",
-	"げ",
-	"ご",
-	"ざ",
-	"じ",
-	"ず",
-	"ぜ",
-	"ぞ",
-	"だ",
-	"ぢ",
-	"づ",
-	"で",
-	"ど",
-	"ば",
-	"び",
-	"ぶ",
-	"べ",
-	"ぼ",
-	"ぱ",
-	"ぴ",
-	"ぷ",
-	"ぺ",
-	"ぽ",
-];
+function KanaTyperSettings() {
+	return (
+		<Flex
+			down
+			bg="white"
+			pad={8}
+			border="1px solid black"
+			style={{ minWidth: 350 }}
+		>
+			<h3>Selected Kana</h3>
+			<Flex gap={12}>
+				<Flex down>
+					{Object.entries(kanaTables.hiragana).map(([rowName, kanas]) => (
+						<CheckBox
+							key={rowName}
+							onChange={() => {
+								const arr = game.enabledKanas as any as string[] & {
+									remove: (value: string) => boolean;
+								};
+
+								if (!kanas.every((it) => arr.remove(it))) {
+									arr.push(...kanas);
+								}
+
+								game.reset();
+							}}
+							checked={kanas.every((k) => game.enabledKanas.includes(k))}
+						>
+							<div>{kanas.join(", ")}</div>
+						</CheckBox>
+					))}
+				</Flex>
+
+				<Flex down>
+					{Object.entries(kanaTables.katakana).map(([rowName, kanas]) => (
+						<CheckBox
+							key={rowName}
+							onChange={() => {
+								const arr = game.enabledKanas as any as string[] & {
+									remove: (value: string) => boolean;
+								};
+
+								if (!kanas.every((it) => arr.remove(it))) {
+									arr.push(...kanas);
+								}
+
+								game.reset();
+							}}
+							checked={kanas.every((k) => game.enabledKanas.includes(k))}
+						>
+							<div>{kanas.join(", ")}</div>
+						</CheckBox>
+					))}
+				</Flex>
+			</Flex>
+		</Flex>
+	);
+}
+
+const kanaTables = {
+	hiragana: {
+		row1: ["あ", "い", "う", "え", "お"],
+		row2: ["か", "き", "く", "け", "こ"],
+		row3: ["さ", "し", "す", "せ", "そ"],
+		row4: ["た", "ち", "つ", "て", "と"],
+		row5: ["な", "に", "ぬ", "ね", "の"],
+		row6: ["は", "ひ", "ふ", "へ", "ほ"],
+		row7: ["ま", "み", "む", "め", "も"],
+		row8: ["や", "ゆ", "よ"],
+		row9: ["ら", "り", "る", "れ", "ろ"],
+		row10: ["わ", "を", "ん"],
+	},
+	katakana: {
+		row1: ["ア", "イ", "ウ", "エ", "オ"],
+		row2: ["カ", "キ", "ク", "ケ", "コ"],
+		row3: ["サ", "シ", "ス", "セ", "ソ"],
+		row4: ["タ", "チ", "ツ", "テ", "ト"],
+		row5: ["ナ", "ニ", "ヌ", "ネ", "ノ"],
+		row6: ["ハ", "ヒ", "フ", "ヘ", "ホ"],
+		row7: ["マ", "ミ", "ム", "メ", "モ"],
+		row8: ["ヤ", "ユ", "ヨ"],
+		row9: ["ラ", "リ", "ル", "レ", "ロ"],
+		row10: ["ワ", "ヲ", "ン"],
+	},
+};
