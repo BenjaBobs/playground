@@ -12,6 +12,18 @@ export namespace KanaUtils {
 	export function toAll(input: string) {
 		return [toRomaji(input), toHiragana(input), toKatakana(input)];
 	}
+	export function toDakuten(input: string) {
+		return transpileLangSymbol(toDakutenLookup, 3, input);
+	}
+	export function toHandakuten(input: string) {
+		return transpileLangSymbol(toHandakutenLookup, 3, input);
+	}
+	export function fromDakuten(input: string) {
+		return transpileLangSymbol(fromDakutenLookup, 3, input);
+	}
+	export function fromHandakuten(input: string) {
+		return transpileLangSymbol(fromHandakutenLookup, 3, input);
+	}
 }
 
 (window as any).KanaUtils = KanaUtils;
@@ -52,6 +64,69 @@ function transpileLangSymbol(
 	return transpiled;
 }
 
+function initDiacriticMaps() {
+	if (toDakutenLookup.size !== 0) return;
+
+	const dakutenChars = [
+		["が", "か"],
+		["ぎ", "き"],
+		["ぐ", "く"],
+		["げ", "け"],
+		["ご", "こ"],
+		["ざ", "さ"],
+		["じ", "し"],
+		["ず", "す"],
+		["ぜ", "せ"],
+		["ぞ", "そ"],
+		["だ", "た"],
+		["ぢ", "ち"],
+		["づ", "つ"],
+		["で", "て"],
+		["ど", "と"],
+		["ば", "な"],
+		["び", "ひ"],
+		["ぶ", "ふ"],
+		["べ", "へ"],
+		["ぼ", "ほ"],
+	];
+
+	for (const [hiraganaDakuten, hiraganaNormal] of dakutenChars) {
+		const katakanaDakuten = KanaUtils.toKatakana(hiraganaDakuten);
+		const katakanaNormal = KanaUtils.toKatakana(hiraganaNormal);
+		const romajiDakuten = KanaUtils.toRomaji(hiraganaDakuten);
+		const romajiNormal = KanaUtils.toRomaji(hiraganaNormal);
+
+		toDakutenLookup.set(hiraganaNormal, hiraganaDakuten);
+		toDakutenLookup.set(katakanaNormal, katakanaDakuten);
+		toDakutenLookup.set(romajiNormal, romajiDakuten);
+		fromDakutenLookup.set(hiraganaDakuten, hiraganaNormal);
+		fromDakutenLookup.set(katakanaDakuten, katakanaNormal);
+		fromDakutenLookup.set(romajiDakuten, romajiNormal);
+	}
+
+	const handakutenChars = [
+		["ぱ ", "は"],
+		["ぴ ", "ひ"],
+		["ぷ ", "ふ"],
+		["ぺ ", "へ"],
+		["ぽ ", "ほ"],
+	];
+	for (const [hiraganaDakuten, hiraganaNormal] of handakutenChars) {
+		const katakanaDakuten = KanaUtils.toKatakana(hiraganaDakuten);
+		const katakanaNormal = KanaUtils.toKatakana(hiraganaNormal);
+		const romajiDakuten = KanaUtils.toRomaji(hiraganaDakuten);
+		const romajiNormal = KanaUtils.toRomaji(hiraganaNormal);
+
+		toHandakutenLookup.set(hiraganaNormal, hiraganaDakuten);
+		toHandakutenLookup.set(katakanaNormal, katakanaDakuten);
+		toHandakutenLookup.set(romajiNormal, romajiDakuten);
+		fromHandakutenLookup.set(hiraganaDakuten, hiraganaNormal);
+		fromHandakutenLookup.set(katakanaDakuten, katakanaNormal);
+		fromHandakutenLookup.set(romajiDakuten, romajiNormal);
+	}
+}
+
+/* [hiragana, katakana, romaji] */
 const symbolGroupings: [string, string, string][] = [
 	["あ", "ア", "a"],
 	["い", "イ", "i"],
@@ -213,4 +288,8 @@ const katakanaLookup = new Map<string, string>([
 	...symbolGroupings.map(([, katakana, romaji]) => [romaji, katakana]),
 ] as [string, string][]);
 
-console.log(katakanaLookup);
+let toDakutenLookup = new Map<string, string>();
+let toHandakutenLookup = new Map<string, string>();
+let fromDakutenLookup = new Map<string, string>();
+let fromHandakutenLookup = new Map<string, string>();
+initDiacriticMaps();

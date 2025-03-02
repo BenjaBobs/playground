@@ -28,6 +28,8 @@ const game = makeAutoObservable({
 	timeLimitMs: 0,
 	finished: false,
 	enabledKanas: [] as string[],
+	dakuten: true,
+	handakuten: true,
 
 	reset(): void {
 		this.currentInput = "";
@@ -100,9 +102,22 @@ const game = makeAutoObservable({
 
 		if (!this.enabledKanas.length) return result;
 
+		const pool = new Set([...this.enabledKanas]);
+
+		if (this.dakuten) {
+			for (const dakuten of [...pool.values()].map(KanaUtils.toDakuten))
+				pool.add(dakuten);
+		}
+
+		if (this.handakuten) {
+			for (const handakuten of [...pool.values()].map(KanaUtils.toHandakuten))
+				pool.add(handakuten);
+		}
+
+		const poolArr = Array.from(pool);
+
 		for (let i = 0; i < 10; i++) {
-			const selectedKana =
-				this.enabledKanas[Math.floor(Math.random() * this.enabledKanas.length)];
+			const selectedKana = poolArr[Math.floor(Math.random() * poolArr.length)];
 
 			result.push({
 				idx: startingIdx + i,
@@ -123,10 +138,10 @@ export function KanaTyper() {
 	return (
 		<ContentBox>
 			<Flex itemsPlacement="center" gap={12}>
-				<h1>Kana typer</h1>
 				<Dropdown trigger="click" content={<KanaTyperSettings />}>
 					<span className="clickable">&#128736;</span>
 				</Dropdown>
+				<h1>Kana typer</h1>
 			</Flex>
 			<div>
 				{!game.timer
@@ -193,10 +208,10 @@ export function KanaTyper() {
 					<div>
 						Kana/minute:{" "}
 						{(
-							game.allTypedKanas.filter((it) => it.correct != undefined)
+							(game.allTypedKanas.filter((it) => it.correct != undefined)
 								.length /
-							60_000 /
-							game.timeLimitMs
+								game.timeLimitMs) *
+							60_000
 						).toFixed(2)}
 					</div>
 				</>
@@ -215,6 +230,26 @@ function KanaTyperSettings() {
 			style={{ minWidth: 350 }}
 		>
 			<h3>Selected Kana</h3>
+			<Flex>
+				<CheckBox
+					checked={game.dakuten}
+					onChange={(val) => {
+						game.dakuten = val;
+						game.reset();
+					}}
+				>
+					Dakuten
+				</CheckBox>
+				<CheckBox
+					checked={game.handakuten}
+					onChange={(val) => {
+						game.handakuten = val;
+						game.reset();
+					}}
+				>
+					Handakuten
+				</CheckBox>
+			</Flex>
 			<Flex gap={12}>
 				<Flex down>
 					{Object.entries(kanaTables.hiragana).map(([rowName, kanas]) => (
