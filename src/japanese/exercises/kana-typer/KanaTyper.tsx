@@ -252,6 +252,8 @@ function KanaTyperSettings() {
 						const parsed = Number.parseFloat(evt.target.value);
 						if (parsed != null && !Number.isNaN(parsed)) {
 							game.timeLimitMs = parsed * 1000;
+						} else {
+							game.timeLimitMs = 0;
 						}
 					}}
 				/>
