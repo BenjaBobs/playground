@@ -13,6 +13,7 @@ type TypedKana = {
 	expected: string;
 	typed?: string;
 	correct?: boolean;
+	hints: string[];
 };
 
 const game = makeAutoObservable({
@@ -25,7 +26,7 @@ const game = makeAutoObservable({
 	timer: undefined as
 		| undefined
 		| { handle: number; startedAtMs: number; timeLeftMs: number },
-	timeLimitMs: 30_000,
+	timeLimitMs: 0,
 	finished: false,
 	enabledKanas: [] as string[],
 	dakuten: true,
@@ -123,10 +124,19 @@ const game = makeAutoObservable({
 		for (let i = 0; i < 10; i++) {
 			const selectedKana = poolArr[Math.floor(Math.random() * poolArr.length)];
 
+			const expectedInput = KanaUtils.toRomaji(selectedKana);
+
 			result.push({
 				idx: startingIdx + i,
 				kana: selectedKana,
-				expected: KanaUtils.toRomaji(selectedKana),
+				expected: expectedInput,
+				hints:
+					expectedInput.length === 1
+						? [expectedInput]
+						: [
+								expectedInput.slice(0, Math.ceil(expectedInput.length / 2)),
+								expectedInput.slice(Math.ceil(expectedInput.length / 2)),
+							],
 			});
 		}
 
@@ -176,10 +186,21 @@ export function KanaTyper() {
 								<span
 									style={{
 										fontSize: "0.3em",
-										opacity: it.correct != null ? 1 : 0,
+										opacity:
+											it.idx === game.currentIdx || it.correct != null ? 1 : 0,
 									}}
 								>
-									{it.expected}
+									{it.idx === game.currentIdx ? (
+										<span>
+											{it.hints.map((hint, hintIdx) => (
+												<span key={hint} className={`hint-${hintIdx}`}>
+													{hint}
+												</span>
+											))}
+										</span>
+									) : (
+										it.expected
+									)}
 								</span>
 							</Flex>
 						))}

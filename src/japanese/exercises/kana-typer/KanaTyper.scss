@@ -1,6 +1,6 @@
 .\/japanese {
   .correct {
-    background:  oklch(0.9 0.05 141)
+    background: oklch(0.9 0.05 141)
   }
 
   .incorrect {
@@ -9,15 +9,45 @@
 
   .current {
     background: oklch(0.9 0.05 244);
+
+    .hint-0 {
+      opacity: 0;
+      animation-delay: 2s;
+      animation-fill-mode: forwards;
+      animation-name: fadeIn;
+      animation-timing-function: ease-in;
+      animation-duration: 2s;
+    }
+
+    .hint-1 {
+      opacity: 0;
+      animation-delay: 4s;
+      animation-fill-mode: forwards;
+      animation-name: fadeIn;
+      animation-timing-function: ease-in;
+      animation-duration: 2s;
+    }
   }
 
-  .prev,.next {
+  .prev,
+  .next {
     opacity: 0.5;
     font-size: 2em;
   }
 
-  .prev,.cur,.next {
+  .prev,
+  .cur,
+  .next {
     font-size: 3em;
   }
 }
 
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
