@@ -33,6 +33,8 @@ const game = makeAutoObservable({
 	handakuten: true,
 	saveInLocalStorage: false,
 	kanaLikelyhood: {} as { [key: string]: number },
+	kanaLikelyhoodCorrectDecrease: 1,
+	kanaLikelyhoodWrongIncrease: 5,
 	hintDelayMs: 4000,
 
 	reset(): void {
@@ -61,14 +63,18 @@ const game = makeAutoObservable({
 
 		if (kana.correct) {
 			const existingLikelyhood = this.kanaLikelyhood[kana.kana];
-			if (existingLikelyhood === 1 || !existingLikelyhood) {
+			if (
+				!existingLikelyhood ||
+				existingLikelyhood <= this.kanaLikelyhoodCorrectDecrease
+			) {
 				delete this.kanaLikelyhood[kana.kana];
 			} else {
-				this.kanaLikelyhood[kana.kana]++;
+				this.kanaLikelyhood[kana.kana] -= this.kanaLikelyhoodCorrectDecrease;
 			}
 		} else {
 			this.kanaLikelyhood[kana.kana] =
-				(this.kanaLikelyhood[kana.kana] || 0) + 1;
+				(this.kanaLikelyhood[kana.kana] || 0) +
+				this.kanaLikelyhoodWrongIncrease;
 		}
 
 		this.currentInput = "";
@@ -173,6 +179,8 @@ const game = makeAutoObservable({
 			this.dakuten = json.dakuten;
 			this.handakuten = json.handakuten;
 			this.kanaLikelyhood = json.kanaLikelyhood || {};
+			this.kanaLikelyhoodCorrectDecrease = json.kanaLikelyhoodCorrectDecrease;
+			this.kanaLikelyhoodWrongIncrease = json.kanaLikelyhoodWrongIncrease;
 			this.hintDelayMs = json.hintDelayMs;
 		}
 	},
@@ -188,6 +196,8 @@ const game = makeAutoObservable({
 					dakuten: this.dakuten,
 					handakuten: this.handakuten,
 					kanaLikelyhood: this.kanaLikelyhood,
+					kanaLikelyhoodCorrectDecrease: this.kanaLikelyhoodCorrectDecrease,
+					kanaLikelyhoodWrongIncrease: this.kanaLikelyhoodWrongIncrease,
 					hintDelayMs: this.hintDelayMs,
 				}),
 			);
@@ -426,6 +436,36 @@ function KanaTyperSettings() {
 					))}
 				</Flex>
 			</Flex>
+			<h3>Kana likelyhood</h3>
+			<Flex itemsPlacement="center">
+				Correct decrease
+				<input
+					value={game.kanaLikelyhoodCorrectDecrease}
+					onChange={(evt) => {
+						const parsed = Number.parseFloat(evt.target.value);
+						if (parsed != null && !Number.isNaN(parsed)) {
+							game.kanaLikelyhoodCorrectDecrease = parsed;
+						} else {
+							game.kanaLikelyhoodCorrectDecrease = 0;
+						}
+					}}
+				/>
+			</Flex>
+			<Flex itemsPlacement="center">
+				Wrong increase
+				<input
+					value={game.kanaLikelyhoodWrongIncrease}
+					onChange={(evt) => {
+						const parsed = Number.parseFloat(evt.target.value);
+						if (parsed != null && !Number.isNaN(parsed)) {
+							game.kanaLikelyhoodWrongIncrease = parsed;
+						} else {
+							game.kanaLikelyhoodWrongIncrease = 0;
+						}
+					}}
+				/>
+			</Flex>
+
 			<button onClick={() => (game.kanaLikelyhood = {})}>
 				Reset kana kanaLikelyhood
 			</button>
