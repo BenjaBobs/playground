@@ -31,6 +31,8 @@ const game = makeAutoObservable({
 	enabledKanas: [] as string[],
 	dakuten: true,
 	handakuten: true,
+	saveInLocalStorage: false,
+	kanaLikelyhood: {} as { [key: string]: number },
 
 	reset(): void {
 		this.currentInput = "";
@@ -56,6 +58,18 @@ const game = makeAutoObservable({
 		kana.typed = currentText.trim().toLowerCase();
 		kana.correct = kana.typed === kana.expected;
 
+		if (kana.correct) {
+			const existingLikelyhood = this.kanaLikelyhood[kana.kana];
+			if (existingLikelyhood === 1 || !existingLikelyhood) {
+				delete this.kanaLikelyhood[kana.kana];
+			} else {
+				this.kanaLikelyhood[kana.kana]++;
+			}
+		} else {
+			this.kanaLikelyhood[kana.kana] =
+				(this.kanaLikelyhood[kana.kana] || 0) + 1;
+		}
+
 		this.currentInput = "";
 		this.currentIdx++;
 
@@ -66,6 +80,7 @@ const game = makeAutoObservable({
 		}
 
 		this.allTypedKanas.push(kana);
+		this.save();
 	},
 
 	onInput(evt: SyntheticEvent<HTMLInputElement>): void {
@@ -121,6 +136,10 @@ const game = makeAutoObservable({
 
 		const poolArr = Array.from(pool);
 
+		for (const [kana, times] of Object.entries(this.kanaLikelyhood)) {
+			poolArr.push(...kana.repeat(times).split(""));
+		}
+
 		for (let i = 0; i < 10; i++) {
 			const selectedKana = poolArr[Math.floor(Math.random() * poolArr.length)];
 
@@ -142,7 +161,40 @@ const game = makeAutoObservable({
 
 		return result;
 	},
+
+	load() {
+		const saved = localStorage.getItem("kanaTyper");
+		if (saved) {
+			const json = JSON.parse(saved);
+			this.saveInLocalStorage = json.saveInLocalStorage;
+			this.timeLimitMs = json.timeLimitMs;
+			this.enabledKanas = json.enabledKanas || [];
+			this.dakuten = json.dakuten;
+			this.handakuten = json.handakuten;
+			this.kanaLikelyhood = json.kanaLikelyhood || {};
+		}
+	},
+
+	save() {
+		if (this.saveInLocalStorage) {
+			localStorage.setItem(
+				"kanaTyper",
+				JSON.stringify({
+					saveInLocalStorage: this.saveInLocalStorage,
+					timeLimitMs: this.timeLimitMs,
+					enabledKanas: this.enabledKanas,
+					dakuten: this.dakuten,
+					handakuten: this.handakuten,
+					kanaLikelyhood: this.kanaLikelyhood,
+				}),
+			);
+		} else {
+			localStorage.removeItem("kanaTyper");
+		}
+	},
 });
+game.load();
+(window as any).kanaTyper = game;
 
 export function KanaTyper() {
 	useEffect(() => {
@@ -255,6 +307,8 @@ export function KanaTyper() {
 }
 
 function KanaTyperSettings() {
+	game.save();
+
 	return (
 		<Flex
 			down
@@ -264,6 +318,14 @@ function KanaTyperSettings() {
 			border="1px solid black"
 			style={{ minWidth: 350 }}
 		>
+			<CheckBox
+				checked={game.saveInLocalStorage}
+				onChange={(val) => {
+					game.saveInLocalStorage = val;
+				}}
+			>
+				Save settings in localStorage
+			</CheckBox>
 			<h3>Selected Kana</h3>
 			<Flex itemsPlacement="center">
 				Time in seconds{" "}
@@ -321,7 +383,6 @@ function KanaTyperSettings() {
 						</CheckBox>
 					))}
 				</Flex>
-
 				<Flex down>
 					{Object.entries(kanaTables.katakana).map(([rowName, kanas]) => (
 						<CheckBox
@@ -344,6 +405,9 @@ function KanaTyperSettings() {
 					))}
 				</Flex>
 			</Flex>
+			<button onClick={() => (game.kanaLikelyhood = {})}>
+				Reset kana kanaLikelyhood
+			</button>
 		</Flex>
 	);
 }
