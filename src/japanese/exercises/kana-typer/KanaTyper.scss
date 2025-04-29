@@ -12,7 +12,7 @@
 
     .hint-0 {
       opacity: 0;
-      animation-delay: 2s;
+      animation-delay: calc(var(--hint-delay-ms) * 1ms);
       animation-fill-mode: forwards;
       animation-name: fadeIn;
       animation-timing-function: ease-in;
@@ -21,7 +21,7 @@
 
     .hint-1 {
       opacity: 0;
-      animation-delay: 4s;
+      animation-delay: calc(var(--hint-delay-ms) * 2ms);
       animation-fill-mode: forwards;
       animation-name: fadeIn;
       animation-timing-function: ease-in;

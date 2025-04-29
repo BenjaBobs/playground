@@ -33,6 +33,7 @@ const game = makeAutoObservable({
 	handakuten: true,
 	saveInLocalStorage: false,
 	kanaLikelyhood: {} as { [key: string]: number },
+	hintDelayMs: 4000,
 
 	reset(): void {
 		this.currentInput = "";
@@ -172,6 +173,7 @@ const game = makeAutoObservable({
 			this.dakuten = json.dakuten;
 			this.handakuten = json.handakuten;
 			this.kanaLikelyhood = json.kanaLikelyhood || {};
+			this.hintDelayMs = json.hintDelayMs;
 		}
 	},
 
@@ -186,6 +188,7 @@ const game = makeAutoObservable({
 					dakuten: this.dakuten,
 					handakuten: this.handakuten,
 					kanaLikelyhood: this.kanaLikelyhood,
+					hintDelayMs: this.hintDelayMs,
 				}),
 			);
 		} else {
@@ -215,7 +218,10 @@ export function KanaTyper() {
 					: `Time left: ${(game.timer.timeLeftMs / 1000).toFixed(2)}`}
 			</div>
 			<br />
-			<div className="kanas-to-type">
+			<div
+				className="kanas-to-type"
+				style={{ "--hint-delay-ms": game.hintDelayMs } as any}
+			>
 				{[game.kanasPrev, game.kanas, game.kanasNext].map((row, idx) => (
 					<Flex
 						key={idx}
@@ -341,6 +347,21 @@ function KanaTyperSettings() {
 					}}
 				/>
 			</Flex>
+			<Flex itemsPlacement="center">
+				Hint delay in seconds{" "}
+				<input
+					value={game.hintDelayMs / 1000}
+					onChange={(evt) => {
+						const parsed = Number.parseFloat(evt.target.value);
+						if (parsed != null && !Number.isNaN(parsed)) {
+							game.hintDelayMs = parsed * 1000;
+						} else {
+							game.hintDelayMs = 0;
+						}
+					}}
+				/>
+			</Flex>
+
 			<Flex gap={8}>
 				<CheckBox
 					checked={game.dakuten}
