@@ -34,7 +34,7 @@ const game = makeAutoObservable({
 	saveInLocalStorage: false,
 	kanaLikelyhood: {} as { [key: string]: number },
 	kanaLikelyhoodCorrectDecrease: 1,
-	kanaLikelyhoodWrongIncrease: 5,
+	kanaLikelyhoodWrongIncrease: 10,
 	hintDelayMs: 4000,
 
 	reset(): void {
@@ -61,21 +61,16 @@ const game = makeAutoObservable({
 		kana.typed = currentText.trim().toLowerCase();
 		kana.correct = kana.typed === kana.expected;
 
-		if (kana.correct) {
-			const existingLikelyhood = this.kanaLikelyhood[kana.kana];
-			if (
-				!existingLikelyhood ||
-				existingLikelyhood <= this.kanaLikelyhoodCorrectDecrease
-			) {
-				delete this.kanaLikelyhood[kana.kana];
-			} else {
-				this.kanaLikelyhood[kana.kana] -= this.kanaLikelyhoodCorrectDecrease;
-			}
-		} else {
-			this.kanaLikelyhood[kana.kana] =
-				(this.kanaLikelyhood[kana.kana] || 0) +
-				this.kanaLikelyhoodWrongIncrease;
-		}
+		const likelyhoodDiff = kana.correct
+			? -this.kanaLikelyhoodCorrectDecrease
+			: this.kanaLikelyhoodWrongIncrease;
+
+		const undakutened = KanaUtils.fromHandakuten(
+			KanaUtils.fromDakuten(kana.kana),
+		);
+
+		this.kanaLikelyhood[undakutened] =
+			(this.kanaLikelyhood[undakutened] || 0) + likelyhoodDiff;
 
 		this.currentInput = "";
 		this.currentIdx++;
@@ -129,26 +124,22 @@ const game = makeAutoObservable({
 
 		if (!this.enabledKanas.length) return result;
 
-		const pool = new Set([...this.enabledKanas]);
+		const minLikelyhood = this.enabledKanas
+			.map((k) => this.kanaLikelyhood[k] || 0)
+			.reduce((result, next) => Math.min(next, result), 0);
 
-		if (this.dakuten) {
-			for (const dakuten of [...pool.values()].map(KanaUtils.toDakuten))
-				pool.add(dakuten);
-		}
-
-		if (this.handakuten) {
-			for (const handakuten of [...pool.values()].map(KanaUtils.toHandakuten))
-				pool.add(handakuten);
-		}
-
-		const poolArr = Array.from(pool);
-
-		for (const [kana, times] of Object.entries(this.kanaLikelyhood)) {
-			poolArr.push(...kana.repeat(times).split(""));
-		}
+		const pool = this.enabledKanas.flatMap((k) =>
+			k.repeat((this.kanaLikelyhood[k] || 1) - minLikelyhood).split(""),
+		);
 
 		for (let i = 0; i < 10; i++) {
-			const selectedKana = poolArr[Math.floor(Math.random() * poolArr.length)];
+			const kanaCandidate = pool.random()!;
+
+			const drawPool = [kanaCandidate];
+			if (this.dakuten) drawPool.push(KanaUtils.toDakuten(kanaCandidate));
+			if (this.handakuten) drawPool.push(KanaUtils.toHandakuten(kanaCandidate));
+
+			const selectedKana = drawPool.random()!;
 
 			const expectedInput = KanaUtils.toRomaji(selectedKana);
 
