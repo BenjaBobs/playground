@@ -173,6 +173,12 @@ const game = makeAutoObservable({
 			this.kanaLikelyhoodCorrectDecrease = json.kanaLikelyhoodCorrectDecrease;
 			this.kanaLikelyhoodWrongIncrease = json.kanaLikelyhoodWrongIncrease;
 			this.hintDelayMs = json.hintDelayMs;
+
+			const minLikelyhood = Object.values(this.kanaLikelyhood).min() || 0;
+			for (const kana of Object.keys(this.kanaLikelyhood))
+				this.kanaLikelyhood[kana] -= minLikelyhood;
+
+			this.save();
 		}
 	},
 
